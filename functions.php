@@ -56,7 +56,7 @@ function e(?string $string)
 
 function config(?string $key = null, mixed $default = null)
 {
-    $config = require __DIR__.'/config.php';
+    $config = require path('config.php');
 
     if ($key) {
         return $config[$key] ?? $default;
