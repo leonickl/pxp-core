@@ -24,11 +24,11 @@ class CommandRunner
         }
 
         if ($command === 'migrate') {
-            require __DIR__.'/migrate.php';
+            require path('/migrate.php');
         }
 
         if ($command === 'play') {
-            require __DIR__ . '/playground.php';
+            require path('/playground.php');
         }
 
         if ($command === 'trash') {
