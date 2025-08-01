@@ -20,7 +20,7 @@ class CommandRunner
     public function execute(?string $command = null, string ...$args)
     {
         if (!$command || $command === 'server') {
-            shell_exec('/usr/bin/php -S localhost:8085 '.path('index.php'));
+            shell_exec('/usr/bin/php -S localhost:'.config('post', 8085).' '.path('index.php'));
         }
 
         if ($command === 'migrate') {

@@ -14,10 +14,20 @@ class View
 
     public function render(): string
     {
-        $path = path("views/$this->view.php");
+        $internal = "../../views/$this->view.php";
 
-        if (! file_exists($path)) {
-            throw new \PXP\Core\Exceptions\ViewNotFoundException($path);
+        $user = path("views/$this->view.php");
+
+        if(file_exists($internal)) {
+            $path = $internal;
+        }
+
+        if(file_exists($user)) {
+            $path = $user;
+        }
+
+        if (! isset($path)) {
+            throw new \PXP\Core\Exceptions\ViewNotFoundException($user);
         }
 
         extract($this->params);
