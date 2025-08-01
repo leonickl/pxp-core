@@ -67,5 +67,16 @@ function config(?string $key = null, mixed $default = null)
 
 function path(string $path)
 {
-    return __DIR__.'/'.$path;
+    $dir = __DIR__;
+
+    while (!file_exists("$dir/composer.json")) {
+        $parent = dirname($dir);
+        if ($parent === $dir) {
+            throw new \RuntimeException('Could not find project root (composer.json not found).');
+        }
+        $dir = $parent;
+    }
+
+
+    return "$dir/$path";
 }
