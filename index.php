@@ -1,3 +1,3 @@
 <?php
 
-echo \PXP\Core\Lib\App::run();
+echo \PXP\Core\App::run();
