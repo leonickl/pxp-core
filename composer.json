@@ -1,0 +1,20 @@
+{
+    "name": "leonickl/pxp-core",
+    "description": "Core functionality for leonickl/pxp",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "PXP\\Core\\": "src/"
+        },
+        "files": [
+            "functions.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Leo Nickl",
+            "email": "leo@leonickl.de"
+        }
+    ],
+    "require": {}
+}
