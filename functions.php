@@ -65,7 +65,7 @@ function config(?string $key = null, mixed $default = null)
     return $config;
 }
 
-function path(string $path)
+function path(string $path = '')
 {
     $dir = __DIR__;
 
