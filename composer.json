@@ -17,5 +17,7 @@
             "email": "leo@leonickl.de"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "laravel/pint": "^1.24"
+    }
 }

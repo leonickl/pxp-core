@@ -4,7 +4,6 @@ namespace PXP\Core\Lib;
 
 class Log
 {
-
     private static function file()
     {
         return path('log/'.date('Y-m-d').'.log');

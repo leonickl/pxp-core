@@ -4,7 +4,6 @@ namespace PXP\Core\Lib;
 
 class View
 {
-
     private function __construct(protected string $view, protected array $params) {}
 
     public static function make(string $view, array $params = []): self
@@ -18,11 +17,11 @@ class View
 
         $user = path("views/$this->view.php");
 
-        if(file_exists($internal)) {
+        if (file_exists($internal)) {
             $path = $internal;
         }
 
-        if(file_exists($user)) {
+        if (file_exists($user)) {
             $path = $user;
         }
 

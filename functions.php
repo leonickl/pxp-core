@@ -69,14 +69,13 @@ function path(string $path = '')
 {
     $dir = __DIR__;
 
-    while (!file_exists("$dir/vendor")) {
+    while (! file_exists("$dir/vendor")) {
         $parent = dirname($dir);
         if ($parent === $dir) {
             throw new \RuntimeException('Could not find project root (composer.json not found).');
         }
         $dir = $parent;
     }
-
 
     return "$dir/$path";
 }

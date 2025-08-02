@@ -2,8 +2,8 @@
 
 namespace PXP\Core;
 
-use PXP\Core\Exceptions\UnauthorizedException;
 use Exception;
+use PXP\Core\Exceptions\UnauthorizedException;
 use PXP\Core\Lib\Log;
 use PXP\Core\Lib\Router;
 use PXP\Core\Lib\Session;

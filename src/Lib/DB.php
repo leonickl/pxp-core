@@ -4,7 +4,6 @@ namespace PXP\Core\Lib;
 
 class DB
 {
-
     private function __construct(private \PDO $pdo) {}
 
     public static function init()
