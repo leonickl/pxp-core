@@ -11,13 +11,44 @@ use PXP\Core\Lib\View;
 
 class App
 {
-    public static function run()
+    private static function authenticate()
+    {
+        $credentials = (array) config('credentials', []);
+
+        if(! isset($_SERVER['PHP_AUTH_USER'])) {
+            self::unauthorized();
+        }
+
+        if(! array_key_exists($_SERVER['PHP_AUTH_USER'], $credentials)) {
+            self::unauthorized();
+        }
+
+        $password = $credentials[$_SERVER['PHP_AUTH_USER']];
+
+        if($password !== $_SERVER['PHP_AUTH_PW']) {
+            self::unauthorized();
+        }
+    }
+
+    private static function unauthorized()
+    {
+        header('WWW-Authenticate: Basic realm="My Protected Area"');
+        header('HTTP/1.0 401 Unauthorized');
+
+        throw new UnauthorizedException;
+    }
+
+    public static function run(bool $auth = false)
     {
         Session::start();
 
         $page = null;
 
         try {
+            if($auth) {
+                self::authenticate();
+            }
+
             $response = Router::route();
 
             if($response instanceof View) {
