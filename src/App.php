@@ -15,14 +15,20 @@ class App
     {
         Session::start();
 
+        $page = null;
+
         try {
             $response = Router::route();
 
-            $page = $response instanceof View
-                ? $response->layout('app', [
+            if($response instanceof View) {
+                $page = $response->layout('app', [
                     'embedded' => request()->bool('embedded'),
-                ])->render()
-                : null;
+                ])->render();
+            } elseif(is_string($response)) {
+                $page = $response;
+            } else {
+                $page = json_encode($response);
+            }
         } catch (UnauthorizedException) {
             $page = View::make('error.unauthorized')->layout('app')->render();
         } catch (Exception $e) {
