@@ -7,6 +7,7 @@ use Exception;
 use PXP\Core\Lib\Log;
 use PXP\Core\Lib\Router;
 use PXP\Core\Lib\Session;
+use PXP\Core\Lib\View;
 
 class App
 {
@@ -23,7 +24,7 @@ class App
                 ])->render()
                 : null;
         } catch (UnauthorizedException) {
-            $page = \PXP\Core\Lib\View::make('error.unauthorized')->layout('app')->render();
+            $page = View::make('error.unauthorized')->layout('app')->render();
         } catch (Exception $e) {
             $class = $e::class;
             $msg = $e->getMessage();
@@ -32,7 +33,7 @@ class App
 
             Log::log("Error ($class): $msg in $file on line $line");
 
-            $page = \PXP\Core\Lib\View::make('error')->layout('app')->render();
+            $page = View::make('error')->layout('app')->render();
         }
 
         if ($page) {
