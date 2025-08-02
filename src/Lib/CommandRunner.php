@@ -7,7 +7,7 @@ class CommandRunner
     public function initDirs()
     {
         foreach (['database', 'log'] as $dir) {
-            $path = __DIR__ . '/' . $dir;
+            $path = path($dir);
 
             if (file_exists($path) && is_dir($path)) {
                 continue;
