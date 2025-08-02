@@ -23,7 +23,7 @@ class Arrays
                 $values[$k] = $this->access($k);
             }
 
-            return obj(...$values);
+            return obj(...$values)->toObject();
         }
 
         throw new \RuntimeException("invalid key '$key'");

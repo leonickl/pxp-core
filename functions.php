@@ -1,6 +1,7 @@
 <?php
 
 use PXP\Core\Lib\Collection;
+use PXP\Core\Lib\Obj;
 
 function dump(mixed ...$data)
 {
@@ -30,9 +31,9 @@ function c(mixed ...$items)
     return Collection::make($items);
 }
 
-function obj(mixed ...$values)
+function obj(array|object $items)
 {
-    return (object) $values;
+    return Obj::make((object) $items);
 }
 
 function request(string|array|null $key = null)

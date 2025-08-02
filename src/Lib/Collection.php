@@ -126,4 +126,15 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
 
         return $this;
     }
+
+    public function flatten()
+    {
+        $list = [];
+
+        foreach($this->items as $item) {
+            $list = [...$list, ...$item];
+        }
+
+        return self::make($list);
+    }
 }
