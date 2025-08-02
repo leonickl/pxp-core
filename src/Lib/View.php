@@ -14,7 +14,7 @@ class View
 
     public function render(): string
     {
-        $internal = "../../views/$this->view.php";
+        $internal = __DIR__."/../../views/$this->view.php";
 
         $user = path("views/$this->view.php");
 
@@ -27,7 +27,7 @@ class View
         }
 
         if (! isset($path)) {
-            throw new \PXP\Core\Exceptions\ViewNotFoundException($user);
+            throw new \PXP\Core\Exceptions\ViewNotFoundException($this->view);
         }
 
         extract($this->params);
