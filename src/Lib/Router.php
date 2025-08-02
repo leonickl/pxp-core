@@ -26,13 +26,13 @@ class Router
         $endpoint = $tree->find($path);
 
         if ($endpoint === null || count($endpoint->method()) === 0) {
-            return [\PXP\Core\Lib\ErrorController::class, 'notFound', ['route' => $path]];
+            return [\PXP\Core\Controllers\ErrorController::class, 'notFound', ['route' => $path]];
         }
 
         $action = $endpoint->method($method);
 
         if ($action === null) {
-            return [\PXP\Core\Lib\ErrorController::class, 'methodNotSupported', ['route' => $path, 'method' => $method]];
+            return [\PXP\Core\Controllers\ErrorController::class, 'methodNotSupported', ['route' => $path, 'method' => $method]];
         }
 
         $action[2] = [...($action[2] ?? []), ...$tree->param()];

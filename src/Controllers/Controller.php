@@ -1,5 +1,5 @@
 <?php
 
-namespace PXP\Core\Lib;
+namespace PXP\Core\Controllers;
 
 abstract class Controller {}
