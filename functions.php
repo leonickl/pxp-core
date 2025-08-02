@@ -66,6 +66,31 @@ function config(?string $key = null, mixed $default = null)
     return $config;
 }
 
+function env(?string $key = null, mixed $default = null)
+{
+    $raw = str_replace("\r\n", "\n", file_get_contents(path('.env')));
+
+    $env = [];
+
+    foreach(explode("\n", $raw) as $line) {
+        $line = trim($line);
+
+        if(strlen($line) === 0 || ! str_contains($line, '=')) {
+            continue;
+        }
+
+        [$name, $value] = explode('=', $line, 2);
+
+        $env[$name] = $value;
+    }
+
+    if ($key) {
+        return $env[$key] ?? $default;
+    }
+
+    return $env;
+}
+
 function path(string $path = '')
 {
     $dir = __DIR__;

@@ -63,5 +63,12 @@ class CommandRunner
             echo "Restored $table with id $id.", PHP_EOL;
         }
 
+        if($command === 'env') {
+            foreach(env() as $key => $value) {
+                echo "$key: $value", PHP_EOL;
+            }
+
+            exit;
+        }
     }
 }
