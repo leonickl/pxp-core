@@ -32,7 +32,7 @@ class CommandRunner
         }
 
         if ($command === 'trash') {
-            $table = @$args[1];
+            $table = @$args[0];
 
             if(! $table) {
                 die('Please enter table' . PHP_EOL);
@@ -46,13 +46,13 @@ class CommandRunner
         }
 
         if($command === 'restore') {
-            $table = @$args[1];
+            $table = @$args[0];
 
             if(! $table) {
                 die('Please enter table' . PHP_EOL);
             }
 
-            $id = @$args[2];
+            $id = @$args[1];
 
             if(! $id) {
                 die('Please enter an id' . PHP_EOL);
