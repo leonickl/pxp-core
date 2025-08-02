@@ -15,6 +15,10 @@ class CommandRunner
 
             mkdir($path);
         }
+
+        if(! file_exists(path('.env'))) {
+            file_put_contents(path('.env'), '');
+        }
     }
 
     public function execute(?string $command = null, string ...$args)
