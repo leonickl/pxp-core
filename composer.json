@@ -2,7 +2,7 @@
     "name": "leonickl/pxp-core",
     "description": "Core functionality for leonickl/pxp",
     "type": "library",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "autoload": {
         "psr-4": {
             "PXP\\Core\\": "src/"

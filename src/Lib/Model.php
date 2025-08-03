@@ -50,12 +50,17 @@ abstract class Model
 
     public static function find(int $id)
     {
+        return static::findBy('id', $id);
+    }
+
+    public static function findBy(string $column, mixed $value)
+    {
         $object = new static(true);
 
-        $record = \PXP\Core\Lib\DB::init()->find(self::table(), $id);
+        $record = \PXP\Core\Lib\DB::init()->find(self::table(), $column, $value);
 
         if (! $record) {
-            throw new \PXP\Core\Exceptions\ModelNotFoundException(static::class, $id);
+            throw new \PXP\Core\Exceptions\ModelNotFoundException(static::class, $column, $value);
         }
 
         $object->fill(...$record);

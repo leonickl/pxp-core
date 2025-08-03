@@ -4,6 +4,7 @@ namespace PXP\Core\Lib;
 
 class DB
 {
+
     private function __construct(private \PDO $pdo) {}
 
     public static function init()
@@ -63,10 +64,10 @@ class DB
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function find(string $table, int $id)
+    public function find(string $table, string $column, mixed $value)
     {
-        $stmt = $this->pdo->prepare("select * from $table where id = ? and deleted_at is null;");
-        $stmt->execute([$id]);
+        $stmt = $this->pdo->prepare("select * from $table where $column = ? and deleted_at is null;");
+        $stmt->execute([$value]);
 
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
@@ -96,7 +97,7 @@ class DB
 
         $id = $this->pdo->lastInsertId();
 
-        return $this->find($table, $id);
+        return $this->find($table, 'id', $id);
     }
 
     public function update(string $table, array $record)
@@ -127,7 +128,7 @@ class DB
             throw new \Exception('creating record failed');
         }
 
-        return $this->find($table, $id);
+        return $this->find($table, 'id', $id);
     }
 
     public function addColumns(string $table, array $columns)
