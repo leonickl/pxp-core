@@ -149,4 +149,11 @@ class DB
         $this->pdo->prepare("update $table set deleted_at = NULL where id = ?;")
             ->execute([$id]);
     }
+
+    public function tables()
+    {
+        return $this->pdo
+            ->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
+            ->fetchAll(\PDO::FETCH_COLUMN);
+    }
 }
