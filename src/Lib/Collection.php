@@ -58,7 +58,7 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
         return self::make($new);
     }
 
-    public function filter(callable $callback): self
+    public function filter(?callable $callback = null): self
     {
         return self::make(array_filter($this->items, $callback));
     }
