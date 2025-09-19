@@ -15,17 +15,17 @@ class App
     {
         $credentials = (array) config('credentials', []);
 
-        if(! isset($_SERVER['PHP_AUTH_USER'])) {
+        if (! isset($_SERVER['PHP_AUTH_USER'])) {
             self::unauthorized();
         }
 
-        if(! array_key_exists($_SERVER['PHP_AUTH_USER'], $credentials)) {
+        if (! array_key_exists($_SERVER['PHP_AUTH_USER'], $credentials)) {
             self::unauthorized();
         }
 
         $password = $credentials[$_SERVER['PHP_AUTH_USER']];
 
-        if($password !== $_SERVER['PHP_AUTH_PW']) {
+        if ($password !== $_SERVER['PHP_AUTH_PW']) {
             self::unauthorized();
         }
     }
@@ -45,17 +45,17 @@ class App
         $page = null;
 
         try {
-            if($auth) {
+            if ($auth) {
                 self::authenticate();
             }
 
             $response = Router::route();
 
-            if($response instanceof View) {
+            if ($response instanceof View) {
                 $page = $response->layout('app', [
                     'embedded' => request()->bool('embedded'),
                 ])->render();
-            } elseif(is_string($response)) {
+            } elseif (is_string($response)) {
                 $page = $response;
             } else {
                 $page = json_encode($response);

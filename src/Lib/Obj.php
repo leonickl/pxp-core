@@ -4,7 +4,6 @@ namespace PXP\Core\Lib;
 
 class Obj
 {
-
     private function __construct(private object $items) {}
 
     public static function make(object $items): self

@@ -16,7 +16,7 @@ class CommandRunner
             mkdir($path);
         }
 
-        if(! file_exists(path('.env'))) {
+        if (! file_exists(path('.env'))) {
             file_put_contents(path('.env'), '');
         }
     }
@@ -67,19 +67,19 @@ class CommandRunner
             echo "Restored $table with id $id.", PHP_EOL;
         }
 
-        if($command === 'env') {
-            foreach(env() as $key => $value) {
+        if ($command === 'env') {
+            foreach (env() as $key => $value) {
                 echo "$key: $value", PHP_EOL;
             }
         }
 
-        if($command === 'db') {
+        if ($command === 'db') {
             $table = @$args[0];
 
-            if(! $table) {
+            if (! $table) {
                 $tables = DB::init()->tables();
 
-                foreach($tables as $table) {
+                foreach ($tables as $table) {
                     echo $table, PHP_EOL;
                 }
 
@@ -88,7 +88,7 @@ class CommandRunner
 
             $id = @$args[1];
 
-            if(! $id) {
+            if (! $id) {
                 $records = DB::init()->all($table);
 
                 // Determine column widths
@@ -96,7 +96,7 @@ class CommandRunner
                 $colWidths = [];
 
                 foreach ($columns as $col) {
-                    $colWidths[$col] = max(strlen($col), max(array_map(fn($row) => strlen((string)$row[$col]), $records)));
+                    $colWidths[$col] = max(strlen($col), max(array_map(fn ($row) => strlen((string) $row[$col]), $records)));
                 }
 
                 // Print header
@@ -127,11 +127,11 @@ class CommandRunner
             $maxColLen = max(array_map('strlen', array_keys($record)));
 
             foreach ($record as $column => $value) {
-                echo str_pad($column, $maxColLen, ' ', STR_PAD_RIGHT) . " : $value\n";
+                echo str_pad($column, $maxColLen, ' ', STR_PAD_RIGHT)." : $value\n";
             }
         }
 
-        if($command === 'delete') {
+        if ($command === 'delete') {
             $table = @$args[0];
 
             if (! $table) {
