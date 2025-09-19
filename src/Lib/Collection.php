@@ -131,10 +131,32 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
     {
         $list = [];
 
-        foreach($this->items as $item) {
+        foreach ($this->items as $item) {
             $list = [...$list, ...$item];
         }
 
         return self::make($list);
+    }
+
+    public function with(mixed ...$values): self
+    {
+        return self::make([...$this->items, ...$values]);
+    }
+
+    public function without(mixed ...$values): self
+    {
+        return self::make(array_diff($this->items, $values));
+    }
+
+    public function take(int $length): self
+    {
+        return self::make(array_slice($this->items, 0, $length));
+    }
+
+    public function each(callable $callback)
+    {
+        foreach ($this as $key => $value) {
+            $callback($value, $key);
+        }
     }
 }
