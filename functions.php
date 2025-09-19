@@ -2,6 +2,7 @@
 
 use PXP\Core\Lib\Collection;
 use PXP\Core\Lib\Obj;
+use PXP\Core\Lib\PermamentVariable;
 
 function dump(mixed ...$data)
 {
@@ -72,10 +73,10 @@ function env(?string $key = null, mixed $default = null)
 
     $env = [];
 
-    foreach(explode("\n", $raw) as $line) {
+    foreach (explode("\n", $raw) as $line) {
         $line = trim($line);
 
-        if(strlen($line) === 0 || ! str_contains($line, '=')) {
+        if (strlen($line) === 0 || ! str_contains($line, '=')) {
             continue;
         }
 
@@ -104,4 +105,19 @@ function path(string $path = '')
     }
 
     return "$dir/$path";
+}
+
+function perma(string|array $name, mixed $default = null)
+{
+    if (is_array($name)) {
+        foreach ($name as $key => $value) {
+            new PermamentVariable($key)->set($value);
+        }
+
+        return;
+    }
+
+    if (is_string($name)) {
+        return new PermamentVariable($name)->get($default);
+    }
 }
