@@ -10,7 +10,7 @@ class Router
 
         $path = parse_url($uri, PHP_URL_PATH);
 
-        $method = $_SERVER['REQUEST_METHOD'];
+        $method = strtoupper($_REQUEST['__method'] ?? $_SERVER['REQUEST_METHOD']);
 
         @[$class, $function, $params] = self::find($path, $method);
 
