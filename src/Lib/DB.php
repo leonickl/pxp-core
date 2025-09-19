@@ -71,6 +71,14 @@ class DB
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public function findAll(string $table, string $column, mixed $value)
+    {
+        $stmt = $this->pdo->prepare("select * from $table where $column = ? and deleted_at is null;");
+        $stmt->execute([$value]);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function insert(string $table, array $record)
     {
         $record['created_at'] = date('Y-m-d H:i:s');
@@ -154,5 +162,13 @@ class DB
         return $this->pdo
             ->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
             ->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    public function select(string $sql, array $data = [])
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+
+        return c(...$stmt->fetchAll(\PDO::FETCH_ASSOC));
     }
 }

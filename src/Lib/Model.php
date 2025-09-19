@@ -87,6 +87,12 @@ abstract class Model
         }
     }
 
+    public static function findAllBy(string $column, mixed $value)
+    {
+        return c(...\PXP\Core\Lib\DB::init()->findAll(self::table(), $column, $value))
+            ->map(fn(array $record) => new static(exists: true)->fill(...$record));
+    }
+
     public static function new(mixed ...$props)
     {
         return (new static)->fill(...$props);
