@@ -2,6 +2,7 @@
 
 namespace PXP\Core\Lib;
 
+use PXP\Core\Exceptions\ModelNotFoundException;
 use RuntimeException;
 
 abstract class Model
@@ -60,12 +61,30 @@ abstract class Model
         $record = \PXP\Core\Lib\DB::init()->find(self::table(), $column, $value);
 
         if (! $record) {
-            throw new \PXP\Core\Exceptions\ModelNotFoundException(static::class, $column, $value);
+            throw new ModelNotFoundException(static::class, $column, $value);
         }
 
         $object->fill(...$record);
 
         return $object;
+    }
+
+    public static function findOrNull(int $id)
+    {
+        try {
+            return static::find($id);
+        } catch (ModelNotFoundException) {
+            return null;
+        }
+    }
+
+    public static function findByOrNull(string $column, mixed $value) 
+    {
+        try {
+            return static::findBy($column, $value);
+        } catch (ModelNotFoundException) {
+            return null;
+        }
     }
 
     public static function new(mixed ...$props)
