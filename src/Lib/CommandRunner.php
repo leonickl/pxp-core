@@ -21,25 +21,23 @@ class CommandRunner
         }
     }
 
-    public function execute(?string $command = null, string ...$args)
+    private static function registerBuiltIn()
     {
-        if (! $command || $command === 'server') {
+        Command::new('server', function() {
             shell_exec('/usr/bin/php -S localhost:'.config('port', 8085).' '.path('index.php'));
-        }
+        });
 
-        if ($command === 'migrate') {
+        Command::new('migrate', function() {
             require path('/migrate.php');
-        }
+        });
 
-        if ($command === 'play') {
+        Command::new('play', function() {
             require path('/playground.php');
-        }
+        });
 
-        if ($command === 'trash') {
-            $table = @$args[0];
-
+        Command::new('trash', function(?string $table = null) {
             if (! $table) {
-                exit('Please enter table'.PHP_EOL);
+                exit("Please enter table\n");
             }
 
             $trashed = DB::init()->trashedOnly($table);
@@ -47,33 +45,29 @@ class CommandRunner
             foreach ($trashed as $record) {
                 echo json_encode(array_values($record)), PHP_EOL;
             }
-        }
+        });
 
-        if ($command === 'restore') {
-            $table = @$args[0];
-
+        Command::new('restore', function(?string $table = null, int|string|null $id = null) {
             if (! $table) {
-                exit('Please enter table'.PHP_EOL);
+                exit("Please enter table\n");
             }
 
-            $id = @$args[1];
-
             if (! $id) {
-                exit('Please enter an id'.PHP_EOL);
+                exit("Please enter an id\n");
             }
 
             DB::init()->restore($table, (int) $id);
 
             echo "Restored $table with id $id.", PHP_EOL;
-        }
+        });
 
-        if ($command === 'env') {
+        Command::new('env', function() {
             foreach (env() as $key => $value) {
                 echo "$key: $value", PHP_EOL;
             }
-        }
+        });
 
-        if ($command === 'db') {
+        Command::new('db', function(mixed ...$args) {
             $table = @$args[0];
 
             if (! $table) {
@@ -129,24 +123,43 @@ class CommandRunner
             foreach ($record as $column => $value) {
                 echo str_pad($column, $maxColLen, ' ', STR_PAD_RIGHT)." : $value\n";
             }
-        }
+        });
 
-        if ($command === 'delete') {
-            $table = @$args[0];
-
+        Command::new('delete', function(?string $table = null, int|string|null $id = null) {
             if (! $table) {
-                exit('Please enter table'.PHP_EOL);
+                exit("Please enter table\n");
             }
 
-            $id = @$args[1];
-
             if (! $id) {
-                exit('Please enter an id'.PHP_EOL);
+                exit("Please enter an id\n");
             }
 
             DB::init()->delete($table, $id);
 
             echo "trashed $id of $table\n";
+        });
+    }
+
+    public function execute(?string $command = null, string ...$args)
+    {
+        self::registerBuiltIn();
+
+        $file = path('commands.php');
+
+        if(file_exists($file)) {
+            require $file;
         }
+
+        if($command === null) {
+            exit("please enter an command\n");
+        }
+
+        $action = Command::resolve($command);
+
+        if($action === null) {
+            exit("command not found\n");
+        }
+
+        $action(...$args);
     }
 }
