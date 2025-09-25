@@ -153,10 +153,15 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
         return self::make(array_slice($this->items, 0, $length));
     }
 
-    public function each(callable $callback)
+    public function each(callable $callback): void
     {
         foreach ($this as $key => $value) {
             $callback($value, $key);
         }
+    }
+
+    public function includes(mixed $value): bool
+    {
+        return in_array($value, $this->items);
     }
 }

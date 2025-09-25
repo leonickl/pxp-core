@@ -138,10 +138,24 @@ class DB
         return $this->find($table, 'id', $id);
     }
 
+    public function columnInfos(string $table)
+    {
+        return c(...$this->pdo->query("pragma table_info(`$table`)")->fetchAll(\PDO::FETCH_ASSOC));
+    }
+
+    public function columnNames(string $table)
+    {
+        return $this->columnInfos($table)->map(fn(array $column) => $column['name']);
+    }
+
     public function addColumns(string $table, array $columns)
     {
+        $existing = $this->columnNames($table);
+
         foreach ($columns as $name => $type) {
-            $this->pdo->exec("alter table `$table` add `$name` $type;");
+            if(! $existing->includes($name)) {
+                $this->pdo->exec("alter table `$table` add `$name` $type;");
+            }
         }
     }
 
