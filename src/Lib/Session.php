@@ -40,14 +40,14 @@ class Session
         }
     }
 
-    public static function get(string $key)
+    public static function get(string $key, mixed $default = null)
     {
-        return $_SESSION[$key];
+        return $_SESSION[$key] ?? $default;
     }
 
-    public static function take(string $key)
+    public static function take(string $key, mixed $default = null)
     {
-        $value = self::get($key);
+        $value = self::get($key, $default);
         self::unset($key);
         return $value;
     }
