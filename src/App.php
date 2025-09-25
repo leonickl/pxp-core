@@ -73,10 +73,6 @@ class App
             $page = View::make('error')->layout('app')->render();
         }
 
-        if ($page) {
-            Session::stop();
-        }
-
         return $page ?? null;
     }
 }

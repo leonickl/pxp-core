@@ -18,7 +18,7 @@ class Session
         session_start();
     }
 
-    public static function stop()
+    public static function destroy()
     {
         session_destroy();
     }
@@ -26,6 +26,11 @@ class Session
     public static function set(string $key, mixed $value)
     {
         $_SESSION[$key] = $value;
+    }
+
+    public static function unset(string $key)
+    {
+        unset($_SESSION[$key]);
     }
 
     public static function setAll(array $data)
@@ -38,5 +43,12 @@ class Session
     public static function get(string $key)
     {
         return $_SESSION[$key];
+    }
+
+    public static function take(string $key)
+    {
+        $value = self::get($key);
+        self::unset($key);
+        return $value;
     }
 }
