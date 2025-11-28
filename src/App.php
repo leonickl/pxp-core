@@ -62,7 +62,7 @@ class App
             }
         } catch (UnauthorizedException) {
             $page = View::make('error.unauthorized')->layout('app')->render();
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $class = $e::class;
             $msg = $e->getMessage();
             $file = $e->getFile();
