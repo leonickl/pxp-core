@@ -2,7 +2,7 @@
 
 namespace PXP\Core;
 
-use Exception;
+use Throwable;
 use PXP\Core\Exceptions\UnauthorizedException;
 use PXP\Core\Lib\Log;
 use PXP\Core\Lib\Router;
@@ -52,16 +52,16 @@ class App
             $response = Router::route();
 
             if ($response instanceof View) {
-                $page = $response->layout('app', [
+                return $response->layout('app', [
                     'embedded' => request()->bool('embedded'),
                 ])->render();
             } elseif (is_string($response)) {
-                $page = $response;
+                return $response;
             } else {
-                $page = json_encode($response);
+                return json_encode($response);
             }
         } catch (UnauthorizedException) {
-            $page = View::make('error.unauthorized')->layout('app')->render();
+            return View::make('error.unauthorized')->layout('app')->render();
         } catch (Throwable $e) {
             $class = $e::class;
             $msg = $e->getMessage();
@@ -70,9 +70,7 @@ class App
 
             Log::log("Error ($class): $msg in $file on line $line");
 
-            $page = View::make('error')->layout('app')->render();
+            return View::make('error')->layout('app')->render();
         }
-
-        return $page ?? null;
     }
 }
