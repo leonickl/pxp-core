@@ -24,7 +24,7 @@ class CommandRunner
     private static function registerBuiltIn()
     {
         Command::new('server', function() {
-            shell_exec('/usr/bin/php -S localhost:'.config('port', 8085).' '.path('index.php'));
+            shell_exec('/usr/bin/env php -S localhost:'.config('port', 8085).' '.path('index.php'));
         });
 
         Command::new('migrate', function() {
