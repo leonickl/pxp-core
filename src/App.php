@@ -2,12 +2,13 @@
 
 namespace PXP\Core;
 
-use Throwable;
 use PXP\Core\Exceptions\UnauthorizedException;
+use PXP\Core\Exceptions\ValidationException;
 use PXP\Core\Lib\Log;
 use PXP\Core\Lib\Router;
 use PXP\Core\Lib\Session;
 use PXP\Core\Lib\View;
+use Throwable;
 
 class App
 {
@@ -62,6 +63,10 @@ class App
             }
         } catch (UnauthorizedException) {
             return View::make('error.unauthorized')->layout('app')->render();
+        } catch (ValidationException $e) {
+            return View::make('error.validation', ['error' => $e->getMessage()])
+                ->layout('app')
+                ->render();
         } catch (Throwable $e) {
             $class = $e::class;
             $msg = $e->getMessage();
