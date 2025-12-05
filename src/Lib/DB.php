@@ -145,7 +145,7 @@ class DB
 
     public function columnNames(string $table)
     {
-        return $this->columnInfos($table)->map(fn(array $column) => $column['name']);
+        return $this->columnInfos($table)->map(fn (array $column) => $column['name']);
     }
 
     public function addColumns(string $table, array $columns)
@@ -153,7 +153,7 @@ class DB
         $existing = $this->columnNames($table);
 
         foreach ($columns as $name => $type) {
-            if(! $existing->includes($name)) {
+            if (! $existing->includes($name)) {
                 $this->pdo->exec("alter table `$table` add `$name` $type;");
             }
         }

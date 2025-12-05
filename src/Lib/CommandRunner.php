@@ -23,19 +23,19 @@ class CommandRunner
 
     private static function registerBuiltIn()
     {
-        Command::new('server', function() {
+        Command::new('server', function () {
             shell_exec('/usr/bin/env php -S localhost:'.config('port', 8085).' '.path('index.php'));
         });
 
-        Command::new('migrate', function() {
+        Command::new('migrate', function () {
             require path('/migrate.php');
         });
 
-        Command::new('play', function() {
+        Command::new('play', function () {
             require path('/playground.php');
         });
 
-        Command::new('trash', function(?string $table = null) {
+        Command::new('trash', function (?string $table = null) {
             if (! $table) {
                 exit("Please enter table\n");
             }
@@ -47,7 +47,7 @@ class CommandRunner
             }
         });
 
-        Command::new('restore', function(?string $table = null, int|string|null $id = null) {
+        Command::new('restore', function (?string $table = null, int|string|null $id = null) {
             if (! $table) {
                 exit("Please enter table\n");
             }
@@ -61,13 +61,13 @@ class CommandRunner
             echo "Restored $table with id $id.", PHP_EOL;
         });
 
-        Command::new('env', function() {
+        Command::new('env', function () {
             foreach (env() as $key => $value) {
                 echo "$key: $value", PHP_EOL;
             }
         });
 
-        Command::new('db', function(mixed ...$args) {
+        Command::new('db', function (mixed ...$args) {
             $table = @$args[0];
 
             if (! $table) {
@@ -125,7 +125,7 @@ class CommandRunner
             }
         });
 
-        Command::new('delete', function(?string $table = null, int|string|null $id = null) {
+        Command::new('delete', function (?string $table = null, int|string|null $id = null) {
             if (! $table) {
                 exit("Please enter table\n");
             }
@@ -146,17 +146,17 @@ class CommandRunner
 
         $file = path('commands.php');
 
-        if(file_exists($file)) {
+        if (file_exists($file)) {
             require $file;
         }
 
-        if($command === null) {
+        if ($command === null) {
             exit("please enter an command\n");
         }
 
         $action = Command::resolve($command);
 
-        if($action === null) {
+        if ($action === null) {
             exit("command not found\n");
         }
 

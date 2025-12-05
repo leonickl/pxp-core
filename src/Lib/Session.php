@@ -49,6 +49,7 @@ class Session
     {
         $value = self::get($key, $default);
         self::unset($key);
+
         return $value;
     }
 }

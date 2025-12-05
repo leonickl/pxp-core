@@ -21,8 +21,8 @@ class Command
 
     public static function resolve(string $command): ?Closure
     {
-        foreach(self::$commands as $name => $object) {
-            if($name === $command) {
+        foreach (self::$commands as $name => $object) {
+            if ($name === $command) {
                 return $object->action;
             }
         }
