@@ -9,12 +9,19 @@ class Router
         $uri = '/'.trim($_SERVER['REQUEST_URI'], "/\r\n\t ");
 
         $path = parse_url($uri, PHP_URL_PATH);
-
         $method = strtoupper($_REQUEST['__method'] ?? $_SERVER['REQUEST_METHOD']);
 
-        @[$class, $function, $params] = self::find($path, $method);
+        $content = (object)self::find($path, $method);
 
-        return (new $class)->{$function}(...$params ?? []);
+        foreach($content->middlewares ?? [] as $middleware) {
+            $status = (new $middleware)->apply();
+            
+            if($status !== true) {
+                return $status;
+            }
+        }
+
+        return (new ($content->class))->{$content->method}(...$content->params ?? []);  
     }
 
     private static function find(string $path, string $method)
@@ -26,16 +33,16 @@ class Router
         $endpoint = $tree->find($path);
 
         if ($endpoint === null || count($endpoint->method()) === 0) {
-            return [\PXP\Core\Controllers\ErrorController::class, 'notFound', ['route' => $path]];
+            return ['class' => \PXP\Core\Controllers\ErrorController::class, 'method' => 'notFound', 'params' => ['route' => $path]];
         }
 
         $action = $endpoint->method($method);
 
         if ($action === null) {
-            return [\PXP\Core\Controllers\ErrorController::class, 'methodNotSupported', ['route' => $path, 'method' => $method]];
+            return ['class' => \PXP\Core\Controllers\ErrorController::class, 'method' => 'methodNotSupported', 'params' => ['route' => $path, 'method' => $method]];
         }
 
-        $action[2] = [...($action[2] ?? []), ...$tree->param()];
+        $action['params'] = array_merge($action['params'] ?? [], $tree->param());
 
         return $action;
     }

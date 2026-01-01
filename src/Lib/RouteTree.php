@@ -17,10 +17,10 @@ class RouteTree
     {
         $tree = self::empty();
 
-        foreach ($routes as $route => $action) {
+        foreach ($routes as $route => $content) {
             $split = explode('/', trim($route, '/'));
 
-            $tree->children($split)->methods($action);
+            $tree->children($split)->methods($content);
         }
 
         return $tree;
