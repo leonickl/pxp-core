@@ -46,4 +46,9 @@ class View
             ...$additionalParams,
         ]);
     }
+
+    public function __toString()
+    {
+        return $this->render();
+    }
 }
