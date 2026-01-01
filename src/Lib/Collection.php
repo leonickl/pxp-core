@@ -165,6 +165,11 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
         return self::make($list);
     }
 
+    public function not(mixed ...$keys): self
+    {
+        return $this->only(...$this->keys()->without(...$keys));
+    }
+
     public function take(int $length): self
     {
         return self::make(array_slice($this->items, 0, $length));
@@ -184,7 +189,7 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
 
     public function sample(int $n = 1): self
     {
-        return $this->only(array_rand($this->items, $n));
+        return $this->only(...array_rand($this->items, $n));
     }
 
     public function has(mixed $key): bool
