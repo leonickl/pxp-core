@@ -68,9 +68,14 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
         return implode($glue, $this->items);
     }
 
+    public function first(): mixed
+    {
+        return $this->items[array_keys($this->items)[0]] ?? null;
+    }
+
     public function last(): mixed
     {
-        return $this->items[count($this->items) - 1] ?? null;
+        return $this->items[array_keys($this->items)[count($this->items) - 1]] ?? null;
     }
 
     public function dd(mixed ...$append): void
@@ -148,6 +153,18 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
         return self::make(array_diff($this->items, $values));
     }
 
+    public function only(mixed ...$keys): self
+    {
+        $list = [];
+
+        foreach($keys as $key)
+        {
+            $list[] = $this->items[$key];
+        }
+
+        return self::make($list);
+    }
+
     public function take(int $length): self
     {
         return self::make(array_slice($this->items, 0, $length));
@@ -163,5 +180,15 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
     public function includes(mixed $value): bool
     {
         return in_array($value, $this->items);
+    }
+
+    public function sample(int $n = 1): self
+    {
+        return $this->only(array_rand($this->items, $n));
+    }
+
+    public function has(mixed $key): bool
+    {
+        return $this->keys()->includes($key);
     }
 }
