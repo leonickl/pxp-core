@@ -189,7 +189,8 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
 
     public function sample(int $n = 1): self
     {
-        return $this->only(...array_rand($this->items, $n));
+        $indices = array_rand($this->items, $n);
+        return $this->only(...is_array($indices) ? $indices : [$indices]);
     }
 
     public function has(mixed $key): bool
