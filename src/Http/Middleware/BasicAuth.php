@@ -2,8 +2,8 @@
 
 namespace PXP\Http\Middleware;
 
-use PXP\Core\Auth;
-use PXP\Core\Middleware\Middleware;
+use PXP\Lib\Auth;
+use PXP\Lib\Middleware\Middleware;
 use PXP\Http\Middleware;
 
 /**

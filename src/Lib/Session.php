@@ -1,6 +1,6 @@
 <?php
 
-namespace PXP\Core\Lib;
+namespace PXP\Lib;
 
 use PXP\Ds\Obj;
 

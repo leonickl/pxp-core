@@ -1,11 +1,11 @@
 <?php
 
-namespace PXP\Core;
+namespace PXP\Lib;
 
-use PXP\Core\Lib\Log;
-use PXP\Core\Lib\Router;
-use PXP\Core\Lib\Session;
-use PXP\Core\Lib\View;
+use PXP\Lib\Log;
+use PXP\Router\Router;
+use PXP\Lib\Session;
+use PXP\Html\View;
 use PXP\Exceptions\UnauthorizedException;
 use PXP\Exceptions\ValidationException;
 use Throwable;

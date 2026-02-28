@@ -1,6 +1,6 @@
 <?php
 
-namespace PXP\Core;
+namespace PXP\Lib;
 
 class Log
 {
