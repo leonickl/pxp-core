@@ -129,6 +129,7 @@ abstract class Model
     public function dump()
     {
         dump($this->record);
+
         return $this;
     }
 }

@@ -2,12 +2,12 @@
 
 namespace PXP\Core;
 
-use PXP\Exceptions\UnauthorizedException;
-use PXP\Exceptions\ValidationException;
 use PXP\Core\Lib\Log;
 use PXP\Core\Lib\Router;
 use PXP\Core\Lib\Session;
 use PXP\Core\Lib\View;
+use PXP\Exceptions\UnauthorizedException;
+use PXP\Exceptions\ValidationException;
 use Throwable;
 
 class App

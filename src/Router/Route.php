@@ -10,8 +10,8 @@ class Route
     private static array $routes = [];
 
     private function __construct(
-        readonly private string $route,
-        readonly private string $method,
+        private readonly string $route,
+        private readonly string $method,
 
         private ?string $name = null,
         private ?array $action = null,
@@ -23,6 +23,7 @@ class Route
     {
         $new = new self($route, $method);
         self::$routes[] = $new;
+
         return $new;
     }
 
@@ -36,27 +37,24 @@ class Route
         return self::register($route, 'POST');
     }
 
-    public static function static(string $route): self
-    {
-        return self::get($route)
-            ->do(ServeStatic::)
-    }
-
     public function name(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
     public function do(string $controller, string $method): self
     {
         $this->action = [$controller, $method];
+
         return $this;
     }
 
     public function middleware(string $middleware): self
     {
         $this->middlewares[] = $middleware;
+
         return $this;
     }
 

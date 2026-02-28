@@ -2,9 +2,9 @@
 
 namespace PXP\Data\DB;
 
+use Exception;
 use PDO;
 use PDOException;
-use Exception;
 
 class DB
 {

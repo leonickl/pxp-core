@@ -1,11 +1,11 @@
 <?php
 
+use PXP\Core\Lib\Arrays;
 use PXP\Core\Lib\PermamentVariable;
 use PXP\Core\Lib\View;
 use PXP\Core\Session;
 use PXP\Ds\Obj;
 use PXP\Ds\Vector;
-use PXP\Core\Lib\Arrays;
 
 function dump(mixed ...$data): void
 {

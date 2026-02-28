@@ -14,6 +14,7 @@ class Command
     {
         $new = new self($command, $action);
         self::$commands[$command] = $new;
+
         return $new;
     }
 
