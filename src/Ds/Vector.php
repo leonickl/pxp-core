@@ -135,7 +135,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
                 $groups[$key] = [];
             }
 
-            $groups[$key][] = $item;
+            $groups[$key] = [...$groups[$key], $item];
         }
 
         return $groups;
