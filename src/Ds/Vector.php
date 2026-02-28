@@ -9,7 +9,7 @@ use Exception;
 use IteratorAggregate;
 use Traversable;
 
-readonly class Vector implements ArrayAccess, Countable, IteratorAggregate
+class Vector implements ArrayAccess, Countable, IteratorAggregate
 {
     private function __construct(private array $items) {}
 

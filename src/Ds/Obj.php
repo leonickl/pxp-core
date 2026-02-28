@@ -9,7 +9,7 @@ use IteratorAggregate;
 use Traversable;
 use stdClass;
 
-readonly class Obj implements ArrayAccess, Countable, IteratorAggregate
+class Obj implements ArrayAccess, Countable, IteratorAggregate
 {
     private function __construct(private array $items) {}
 
