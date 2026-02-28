@@ -7,7 +7,7 @@ namespace PXP\Http\Controllers;
  * that are provided by the framework. To serve your own
  * files, just copy this controller and adjust it.
  */
-abstract class AssetController
+class AssetController
 {
     /**
      * Add this to your route definitions to serve css files:
