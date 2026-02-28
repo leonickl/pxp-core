@@ -88,7 +88,7 @@ Command::new('db', function (mixed ...$args) {
         // Print rows
         foreach ($records as $row) {
             foreach ($columns as $col) {
-                echo str_pad($row[$col], $colWidths[$col] + 2);
+                echo str_pad((string) $row[$col], $colWidths[$col] + 2);
             }
             echo PHP_EOL;
         }
