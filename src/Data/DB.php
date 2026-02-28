@@ -88,12 +88,12 @@ class DB
         $record['created_at'] = date('Y-m-d H:i:s');
         $record['modified_at'] = date('Y-m-d H:i:s');
 
-        $columns = c(...$record)
+        $columns = o(...$record)
             ->keys()
             ->map(fn ($x) => "`$x`")
             ->join(', ');
 
-        $placeholders = c(...$record)
+        $placeholders = o(...$record)
             ->keys()
             ->map(fn (string $key) => ":$key")
             ->join(', ');
@@ -129,7 +129,7 @@ class DB
 
         $sql = "update `$table` set $update where id = $id;";
 
-        $values = c(...$record)
+        $values = o(...$record)
             ->values()
             ->toArray();
 
@@ -144,7 +144,7 @@ class DB
 
     public function columnInfos(string $table)
     {
-        return c(...$this->pdo->query("pragma table_info(`$table`)")->fetchAll(PDO::FETCH_ASSOC));
+        return v(...$this->pdo->query("pragma table_info(`$table`)")->fetchAll(PDO::FETCH_ASSOC));
     }
 
     public function columnNames(string $table)
@@ -187,6 +187,6 @@ class DB
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
 
-        return c(...$stmt->fetchAll(PDO::FETCH_ASSOC));
+        return v(...$stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 }

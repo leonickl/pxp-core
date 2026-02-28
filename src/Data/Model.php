@@ -46,7 +46,7 @@ abstract class Model
     {
         $list = DB::init()->all(self::table());
 
-        return c(...$list)->map(fn (array $record) => (new static(true))->fill(...$record));
+        return v(...$list)->map(fn (array $record) => (new static(true))->fill(...$record));
     }
 
     public static function find(int $id)
@@ -89,7 +89,7 @@ abstract class Model
 
     public static function findAllBy(string $column, mixed $value)
     {
-        return c(...DB::init()->findAll(self::table(), $column, $value))
+        return v(...DB::init()->findAll(self::table(), $column, $value))
             ->map(fn (array $record) => new static(exists: true)->fill(...$record));
     }
 
