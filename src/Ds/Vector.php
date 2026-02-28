@@ -15,7 +15,7 @@ readonly class Vector implements ArrayAccess, Countable, IteratorAggregate
 
     public static function make(array $items = []): self
     {
-        if (! is_list($items)) {
+        if (! array_is_list($items)) {
             throw new Exception('Vector must receive a list as input');
         }
 
