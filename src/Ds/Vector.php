@@ -50,10 +50,7 @@ readonly class Vector implements ArrayAccess, Countable, IteratorAggregate
 
     public function offsetUnset(int $offset): void
     {
-        $items = $this->items;
-        array_splice($items, $offset, 1);
-
-        return self::make($items);
+        unset($this->items[$offset]);
     }
 
     public function count(): int

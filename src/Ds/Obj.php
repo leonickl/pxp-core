@@ -34,10 +34,7 @@ readonly class Obj implements ArrayAccess, Countable, IteratorAggregate
 
     public function offsetUnset(int|string $offset): void
     {
-        $items = $this->items;
-        unset($items[$offset]);
-
-        return self::make($items);
+        unset($this->items[$offset]);
     }
 
     public function count(): int
