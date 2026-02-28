@@ -7,6 +7,7 @@ use ArrayIterator;
 use Countable;
 use IteratorAggregate;
 use Traversable;
+use stdClass;
 
 readonly class Obj implements ArrayAccess, Countable, IteratorAggregate
 {
