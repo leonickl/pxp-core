@@ -17,23 +17,39 @@ readonly class Obj implements ArrayAccess, Countable, IteratorAggregate
         return new self((array) $items);
     }
 
-    public function offsetExists(int|string $offset): bool
+    public function offsetExists(mixed $offset): bool
     {
+        if (! is_int($offset) && ! is_string($offset)) {
+            throw new Exception('offset must be int or string, '.gettype($offset).' given');
+        }
+
         return isset($this->items[$offset]);
     }
 
-    public function offsetGet(int|string $offset): mixed
+    public function offsetGet(mixed $offset): mixed
     {
+        if (! is_int($offset) && ! is_string($offset)) {
+            throw new Exception('offset must be int or string, '.gettype($offset).' given');
+        }
+
         return $this->items[$offset];
     }
 
-    public function offsetSet(int|string $offset, mixed $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
+        if (! is_int($offset) && ! is_string($offset)) {
+            throw new Exception('offset must be int or string, '.gettype($offset).' given');
+        }
+
         $this->items[$offset] = $value;
     }
 
-    public function offsetUnset(int|string $offset): void
+    public function offsetUnset(mixed $offset): void
     {
+        if (! is_int($offset) && ! is_string($offset)) {
+            throw new Exception('offset must be int or string, '.gettype($offset).' given');
+        }
+
         unset($this->items[$offset]);
     }
 

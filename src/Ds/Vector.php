@@ -33,23 +33,39 @@ readonly class Vector implements ArrayAccess, Countable, IteratorAggregate
         return self::make($array);
     }
 
-    public function offsetExists(int $offset): bool
+    public function offsetExists(mixed $offset): bool
     {
+        if (! is_int($offset)) {
+            throw new Exception('offset must be int, '.gettype($offset).' given');
+        }
+
         return isset($this->items[$offset]);
     }
 
-    public function offsetGet(int $offset): mixed
+    public function offsetGet(mixed $offset): mixed
     {
+        if (! is_int($offset)) {
+            throw new Exception('offset must be int, '.gettype($offset).' given');
+        }
+
         return $this->items[$offset];
     }
 
-    public function offsetSet(int $offset, mixed $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
+        if (! is_int($offset)) {
+            throw new Exception('offset must be int, '.gettype($offset).' given');
+        }
+
         $this->items[$offset] = $value;
     }
 
-    public function offsetUnset(int $offset): void
+    public function offsetUnset(mixed $offset): void
     {
+        if (! is_int($offset)) {
+            throw new Exception('offset must be int, '.gettype($offset).' given');
+        }
+
         unset($this->items[$offset]);
     }
 
