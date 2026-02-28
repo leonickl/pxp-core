@@ -2,12 +2,10 @@
 
 namespace PXP\Lib;
 
-use PXP\Lib\Log;
-use PXP\Router\Router;
-use PXP\Lib\Session;
-use PXP\Html\View;
 use PXP\Exceptions\UnauthorizedException;
 use PXP\Exceptions\ValidationException;
+use PXP\Html\View;
+use PXP\Router\Router;
 use Throwable;
 
 class App

@@ -2,10 +2,9 @@
 
 namespace PXP\Http\Middleware;
 
+use PXP\Http\Middleware;
 use PXP\Lib\Auth;
 use PXP\Lib\Session;
-use PXP\Http\Middleware\Middleware;
-use PXP\Http\Middleware;
 
 class InteractiveAuth extends Middleware
 {
