@@ -46,7 +46,7 @@ class Router
         $endpoint = $tree->find($path);
 
         if ($endpoint === null || count($endpoint->method()) === 0) {
-            return [
+            return (object) [
                 'class' => ErrorController::class,
                 'method' => 'notFound',
                 'params' => ['route' => $path],
@@ -57,7 +57,7 @@ class Router
         $action = $endpoint->method($method);
 
         if ($action === null) {
-            return [
+            return (object) [
                 'class' => ErrorController::class,
                 'method' => 'methodNotSupported',
                 'params' => ['route' => $path, 'method' => $method],
