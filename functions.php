@@ -1,10 +1,13 @@
 <?php
 
-use PXP\Core\Lib\Collection;
-use PXP\Core\Lib\Obj;
 use PXP\Core\Lib\PermamentVariable;
+use PXP\Core\Lib\View;
+use PXP\Core\Session;
+use PXP\Ds\Obj;
+use PXP\Ds\Vector;
+use PXP\Core\Lib\Arrays;
 
-function dump(mixed ...$data)
+function dump(mixed ...$data): void
 {
     echo '<pre>';
 
@@ -15,24 +18,24 @@ function dump(mixed ...$data)
     echo '</pre>';
 }
 
-function dd(mixed ...$data)
+function dd(mixed ...$data): never
 {
     dump(...$data);
 
     exit();
 }
 
-function view(string $view, array $params = [])
+function view(string $view, array $params = []): View
 {
-    return \PXP\Core\Lib\View::make($view, $params);
+    return View::make($view, $params);
 }
 
-function c(mixed ...$items)
+function v(mixed ...$items): Vector
 {
-    return Collection::make($items);
+    return Vector::make($items);
 }
 
-function obj(array|object $items)
+function o(mixed ...$items): Obj
 {
     return Obj::make((object) $items);
 }
@@ -40,15 +43,15 @@ function obj(array|object $items)
 function request(string|array|null $key = null)
 {
     if ($key === null) {
-        return new \PXP\Core\Lib\Arrays($_REQUEST);
+        return new Arrays($_REQUEST);
     }
 
-    return (new \PXP\Core\Lib\Arrays($_REQUEST))->access($key);
+    return (new Arrays($_REQUEST))->access($key);
 }
 
 function session(string|array|null $key = null)
 {
-    return (new \PXP\Core\Lib\Arrays($_SESSION))->access($key);
+    return Session::access($key);
 }
 
 function e(?string $string)
