@@ -1,6 +1,6 @@
 <?php
 
-namespace PXP\Data\Model;
+namespace PXP\Data;
 
 use PXP\Exceptions\ModelNotFoundException;
 use RuntimeException;

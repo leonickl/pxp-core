@@ -1,6 +1,6 @@
 <?php
 
-namespace PXP\Data\DB;
+namespace PXP\Data;
 
 use Exception;
 use PDO;
