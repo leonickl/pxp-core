@@ -15,10 +15,6 @@ class BasicAuth extends Middleware
 {
     public function apply(): mixed
     {
-        if (Auth::auth()) {
-            return true;
-        }
-
         $credentials = (array) config('credentials', []);
 
         if (! isset($_SERVER['PHP_AUTH_USER'])) {
