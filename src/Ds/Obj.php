@@ -54,6 +54,16 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
         unset($this->items[$offset]);
     }
 
+    public function __get(mixed $key)
+    {
+        return $this->items[$key];
+    }
+
+    public function __set(mixed $key, mixed $value)
+    {
+        $this->items[$key] = $value;
+    }
+
     public function count(): int
     {
         return count($this->items);
