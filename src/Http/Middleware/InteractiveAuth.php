@@ -2,7 +2,7 @@
 
 namespace PXP\Http\Middleware;
 
-use PXP\Http\Middleware;
+use PXP\Http\Middleware\Middleware;
 use PXP\Lib\Auth;
 use PXP\Lib\Session;
 

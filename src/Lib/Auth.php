@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace PXP\Lib;
 
 use App\Models\User;
 use PXP\Lib\Session;
