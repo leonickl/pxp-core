@@ -6,32 +6,28 @@ use RuntimeException;
 
 class Arrays
 {
-    public function __construct(private array $array) {}
+    public function __construct(private array &$array) {}
 
     public function access(string|array|null $key = null)
     {
-        if ($key === null) {
-            return $this->array;
-        }
-
         if (is_string($key)) {
             return $this->array[$key] ?? null;
         }
 
         if (is_array($key)) {
-            $values = [];
+            $values = o();
 
             foreach ($key as $k) {
-                $values[$k] = $this->access($k);
+                $values->$k = $this->array[$k];
             }
 
             return (object) $values;
         }
 
-        throw new RuntimeException("invalid key '$key'");
+        return $this;
     }
 
-    public function array()
+    public function array(): array
     {
         return $this->array;
     }
