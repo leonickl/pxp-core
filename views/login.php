@@ -1,6 +1,6 @@
 <h1>Log in to <?= config('title') ?></h1>
 
-<?php foreach($errors as $error): ?>
+<?php foreach ($errors as $error): ?>
     <div class="notification"><p class="m-0 p-0"><?= $error ?></p></div>
 <?php endforeach ?>
 

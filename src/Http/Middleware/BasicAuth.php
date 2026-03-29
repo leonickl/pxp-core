@@ -2,9 +2,6 @@
 
 namespace PXP\Http\Middleware;
 
-use PXP\Http\Middleware\Middleware;
-use PXP\Lib\Auth;
-
 /**
  * Set up HTTP basic authentication with users stored
  * in config('credentials') as an associative array

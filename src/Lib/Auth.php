@@ -3,7 +3,6 @@
 namespace PXP\Lib;
 
 use App\Models\User;
-use PXP\Lib\Session;
 
 /**
  * Facade for interactive authentication.
