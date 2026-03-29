@@ -51,6 +51,7 @@ class Router
                 'class' => ErrorController::class,
                 'method' => 'notFound',
                 'params' => ['route' => $path],
+                'middlewares' => [],
             ];
         }
 
@@ -62,6 +63,7 @@ class Router
                 'class' => ErrorController::class,
                 'method' => 'methodNotSupported',
                 'params' => ['route' => $path, 'method' => $method],
+                'middlewares' => [],
             ];
         }
 
