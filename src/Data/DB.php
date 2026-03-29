@@ -5,6 +5,7 @@ namespace PXP\Data;
 use Exception;
 use PDO;
 use PDOException;
+use PXP\Lib\Log;
 
 class DB
 {
