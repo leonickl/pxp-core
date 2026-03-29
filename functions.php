@@ -124,3 +124,8 @@ function perma(string|array $name, mixed $default = null)
         return new PermamentVariable($name)->get($default);
     }
 }
+
+function auth(): bool
+{
+    return PXP\Lib\Auth::auth();
+}
