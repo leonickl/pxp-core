@@ -107,7 +107,7 @@ class DB
             throw new Exception('creating record failed');
         }
 
-        $id = $this->pdo->lastInsertId();
+        $id =  $record['id'] ?? $this->pdo->lastInsertId();
 
         return $this->find($table, 'id', $id);
     }
