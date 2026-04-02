@@ -48,12 +48,17 @@ class RouteTree
 
     private function match(string|array $keys)
     {
+        // match a url part
         if (is_string($keys)) {
+            // at first match fully specified paths
             foreach ($this->children as $key => $child) {
                 if ($key === $keys) {
                     return $child;
                 }
+            }
 
+            // then try with path arguments
+            foreach ($this->children as $key => $child) {
                 if (str_starts_with($key, '{') && str_ends_with($key, '}')) {
                     $this->param([substr($key, 1, -1) => $keys]);
 
@@ -61,13 +66,16 @@ class RouteTree
                 }
             }
 
+            // or and don't find anything :/
             return null;
         }
 
+        // arrived at end of url
         if (count($keys) === 0 || count($keys) === 1 && $keys[0] === '') {
             return $this;
         }
 
+        // match first url part and then the rest
         return $this->match(array_shift($keys))?->match($keys);
     }
 
