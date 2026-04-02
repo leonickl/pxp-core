@@ -76,4 +76,9 @@ class Route
 
         return $routes;
     }
+
+    public static function group(Route ...$routes)
+    {
+        return new Group(v(...$routes));
+    }
 }
