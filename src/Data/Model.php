@@ -69,8 +69,12 @@ abstract class Model
         return $object;
     }
 
-    public static function findOrNull(int $id)
+    public static function findOrNull(?int $id)
     {
+        if ($id === null) {
+            return null;
+        }
+
         try {
             return static::find($id);
         } catch (ModelNotFoundException) {
