@@ -29,12 +29,7 @@ function dd(mixed ...$data): never
 
 function view(string $view, array $params = [], string $layout = 'app'): View
 {
-    return View::make($view, $params);
-}
-
-function plate(string $view, array $params = [], string $layout = 'app'): Plate
-{
-    return Plate::make($view, $params);
+    return View::make($view, $params, $layout);
 }
 
 function v(mixed ...$items): Vector
