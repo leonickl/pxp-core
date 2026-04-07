@@ -47,7 +47,7 @@ function request(string|array|null $key = null)
 
 function session(string|array|null $key = null)
 {
-    return (new Arrays($_ESSSION))->access($key);
+    return (new Arrays($_SESSION))->access($key);
 }
 
 function e(?string $string)
