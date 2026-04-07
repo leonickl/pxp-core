@@ -132,5 +132,5 @@ function auth(): bool
 
 function back(int $steps = 1, array $data = []): Redirect
 {
-    return Redirect::back(steps, $data);
+    return Redirect::back($steps, $data);
 }
