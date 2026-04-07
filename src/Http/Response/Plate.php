@@ -5,17 +5,17 @@ namespace PXP\Http\Response;
 use PXP\Exceptions\ViewNotFoundException;
 use Override;
 
-class Plate extends View
+class Plate extends Template
 {
     private function findPlate(): string
     {
-        $user = path("views/$this->view.plate");
+        $user = path("views/$this->view.plate.php");
 
         if (file_exists($user)) {
             return $user;
         }
 
-        $internal = path("views/$this->view.plate", internal: true);
+        $internal = path("views/$this->view.plate.php", internal: true);
 
         if (file_exists($internal)) {
             return $internal;
@@ -36,16 +36,9 @@ class Plate extends View
         }
 
         if (! file_exists($php)) {
-            file_put_contents($php, LeoNickl\Plate\Plate::file($plate));
+            file_put_contents($php, \LeoNickl\Plate\Plate::file($plate));
         }
         
         return $php;
-    }
-
-    public function layout(string $view)
-    {
-        return self::make($view, [
-            'slot' => $this->render(),
-        ]);
     }
 }
