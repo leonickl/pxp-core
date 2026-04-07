@@ -9,11 +9,14 @@ class View extends Response
     private function __construct(
         protected string $view,
         protected array $params,
-        protected string $layout = 'app',
+        protected string $layout,
     ) {}
 
-    public static function make(string $view, array $params = []): self
-    {
+    public static function make(
+        string $view,
+        array $params = [],
+        string $layout = 'app',
+    ): self {
         return new self($view, $params);
     }
 

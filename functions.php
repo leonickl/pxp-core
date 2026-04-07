@@ -6,6 +6,8 @@ use PXP\Ds\Vector;
 use PXP\Http\Response\Redirect;
 use PXP\Http\Response\View;
 use PXP\Lib\Arrays;
+use PXP\Lib\Auth;
+use RuntimeException;
 
 function dump(mixed ...$data): void
 {
@@ -25,7 +27,7 @@ function dd(mixed ...$data): never
     exit();
 }
 
-function view(string $view, array $params = []): View
+function view(string $view, array $params = [], string $layout = 'app'): View
 {
     return View::make($view, $params);
 }
@@ -98,7 +100,7 @@ function path(string $path = '', bool $internal = false)
     while (! file_exists("$dir/vendor")) {
         $parent = dirname($dir);
         if ($parent === $dir) {
-            throw new \RuntimeException('Could not find project root ("vendor" dir not found).');
+            throw new RuntimeException('Could not find project root ("vendor" dir not found).');
         }
         $dir = $parent;
     }
@@ -127,7 +129,7 @@ function perma(string|array $name, mixed $default = null)
 
 function auth(): bool
 {
-    return PXP\Lib\Auth::auth();
+    return Auth::auth();
 }
 
 function back(int $steps = 1, array $data = []): Redirect
