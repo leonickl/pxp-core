@@ -3,7 +3,7 @@
 use PXP\Data\PermamentVariable;
 use PXP\Ds\Obj;
 use PXP\Ds\Vector;
-use PXP\Html\View;
+use PXP\Http\Response\View;
 use PXP\Lib\Arrays;
 use PXP\Http\Response\Redirect;
 
