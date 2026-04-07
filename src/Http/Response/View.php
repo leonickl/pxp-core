@@ -8,8 +8,8 @@ use PXP\Http\Response;
 class View extends Response
 {
     private function __construct(
-        protected string $view, 
-        protected array $params, 
+        protected string $view,
+        protected array $params,
         protected string $layout = 'app',
     ) {}
 

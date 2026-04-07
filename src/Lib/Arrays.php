@@ -48,12 +48,14 @@ class Arrays
     public function set(string $key, mixed $value): Arrays
     {
         $this->array[$key] = $value;
+
         return $this;
     }
 
     public function unset(string $key): Arrays
     {
         unset($this->array[$key]);
+
         return $this;
     }
 
@@ -61,6 +63,7 @@ class Arrays
     {
         $value = $this->get($key, $default);
         $this->unset($key);
+
         return $value;
     }
 
@@ -95,7 +98,7 @@ class Arrays
         if (! is_array($data)) {
             throw new RuntimeException("'$key' is not an array");
         }
-        
+
         return $data;
     }
 }

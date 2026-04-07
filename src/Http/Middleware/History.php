@@ -2,7 +2,6 @@
 
 namespace PXP\Http\Middleware;
 
-use PXP\Lib\Auth;
 use PXP\Router\Router;
 use stdClass;
 

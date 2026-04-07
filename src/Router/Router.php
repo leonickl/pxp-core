@@ -12,6 +12,7 @@ class Router
     public static function path(): string
     {
         $uri = '/'.trim($_SERVER['REQUEST_URI'], "/\r\n\t ");
+
         return parse_url($uri, PHP_URL_PATH);
     }
 

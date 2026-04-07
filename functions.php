@@ -3,9 +3,9 @@
 use PXP\Data\PermamentVariable;
 use PXP\Ds\Obj;
 use PXP\Ds\Vector;
+use PXP\Http\Response\Redirect;
 use PXP\Http\Response\View;
 use PXP\Lib\Arrays;
-use PXP\Http\Response\Redirect;
 
 function dump(mixed ...$data): void
 {
