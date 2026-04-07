@@ -11,7 +11,7 @@ class History extends Middleware
     {
         if ($this->history($route->history)) {
             session([
-                'history' => [$route, ...session()->array('history')],
+                'history' => [Router::path(), ...session()->array('history')],
             ]);
         }
 
