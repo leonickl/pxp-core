@@ -12,7 +12,7 @@ class App
 {
     public static function run(bool $auth = false): string
     {
-        Session::start();
+        session_start();
 
         try {
             $response = Router::route();

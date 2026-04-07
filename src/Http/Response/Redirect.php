@@ -19,7 +19,7 @@ class Redirect extends Response
     public function output(): string
     {
         if ($this->data) {
-            Session::setAll($this->data);
+            session($this->data);
         }
 
         if (! preg_match('/^[a-zA-Z0-9\/-]+$/', $this->path)) {

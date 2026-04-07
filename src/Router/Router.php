@@ -3,7 +3,6 @@
 namespace PXP\Router;
 
 use PXP\Http\Controllers\ErrorController;
-use PXP\Lib\Session;
 
 class Router
 {

@@ -8,13 +8,13 @@ class Arrays
 {
     public function __construct(private array &$array) {}
 
-    public function access(string|array|null $key = null)
+    public function access(string|array|null $key = null): mixed
     {
         if (is_string($key)) {
-            return $this->array[$key] ?? null;
+            return $this->get($key);
         }
 
-        if (is_array($key)) {
+        if (is_array($key) && array_is_list($key)) {
             $values = o();
 
             foreach ($key as $k) {
@@ -24,21 +24,74 @@ class Arrays
             return (object) $values;
         }
 
+        if (is_array($key)) {
+            foreach ($key as $key => $value) {
+                $this->set($key, $value);
+            }
+
+            return $this;
+        }
+
         return $this;
     }
 
-    public function array(): array
+    public function toArray(): array
     {
         return $this->array;
     }
 
-    public function int(string $key)
+    public function get(string $key, mixed $default = null): mixed
+    {
+        return $this->array[$key] ?? $default;
+    }
+
+    public function set(string $key, mixed $value): Arrays
+    {
+        $this->array[$key] = $value;
+        return $this;
+    }
+
+    public function unset(string $key): Arrays
+    {
+        unset($this->array[$key]);
+        return $this;
+    }
+
+    public function take(string $key, mixed $default = null): mixed
+    {
+        $value = $this->get($key, $default);
+        $this->unset($key);
+        return $value;
+    }
+
+    public function int(string $key): int
     {
         return (int) $this->access($key);
     }
 
-    public function bool(string $key)
+    public function string(string $key): string
+    {
+        return (string) $this->access($key);
+    }
+
+    public function float(string $key): float
+    {
+        return (float) $this->access($key);
+    }
+
+    public function bool(string $key): bool
     {
         return $this->access($key) !== null;
+    }
+
+    public function array(string $key): array
+    {
+        $data = $this->access($key);
+
+        if (! is_array($data)) {
+            throw new RuntimeException("'$key' is not an array");
+        }
+        
+        return $data;
     }
 }

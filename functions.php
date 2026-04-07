@@ -5,7 +5,6 @@ use PXP\Ds\Obj;
 use PXP\Ds\Vector;
 use PXP\Html\View;
 use PXP\Lib\Arrays;
-use PXP\Lib\Session;
 
 function dump(mixed ...$data): void
 {
@@ -42,16 +41,12 @@ function o(mixed ...$items): Obj
 
 function request(string|array|null $key = null)
 {
-    if ($key === null) {
-        return new Arrays($_REQUEST);
-    }
-
     return (new Arrays($_REQUEST))->access($key);
 }
 
 function session(string|array|null $key = null)
 {
-    return Session::access($key);
+    return (new Arrays($_ESSSION))->access($key);
 }
 
 function e(?string $string)
