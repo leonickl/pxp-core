@@ -5,9 +5,9 @@ use PXP\Ds\Obj;
 use PXP\Ds\Vector;
 use PXP\Http\Response\Redirect;
 use PXP\Http\Response\View;
-use PXP\Http\Response\Plate;
 use PXP\Lib\Arrays;
 use PXP\Lib\Auth;
+use PXP\Router\Route;
 
 function dump(mixed ...$data): void
 {
@@ -135,4 +135,10 @@ function auth(): bool
 function back(int $steps = 1, array $data = []): Redirect
 {
     return Redirect::back($steps, $data);
+}
+
+function route(string $name, array $params = []): string
+{
+    return Route::findByName($name)
+        ->fillParams($params);
 }

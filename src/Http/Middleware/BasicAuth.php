@@ -2,6 +2,8 @@
 
 namespace PXP\Http\Middleware;
 
+use PXP\Exceptions\UnauthorizedException;
+
 /**
  * Set up HTTP basic authentication with users stored
  * in config('credentials') as an associative array

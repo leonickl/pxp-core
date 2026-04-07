@@ -205,9 +205,14 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return self::make($list);
     }
 
+    public function keys(): self
+    {
+        return self::make(array_keys($this->items));
+    }
+
     public function not(int ...$keys): self
     {
-        return $this->only(...array_keys($this->items)->without(...$keys));
+        return $this->only(...$this->keys()->without(...$keys));
     }
 
     public function take(int $length): self

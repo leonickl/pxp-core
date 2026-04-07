@@ -2,6 +2,8 @@
 
 namespace PXP\Router;
 
+use Exception;
+
 class Route
 {
     /**
@@ -89,5 +91,33 @@ class Route
     public static function group(Route ...$routes)
     {
         return new Group(v(...$routes));
+    }
+
+    public static function findByName(string $name): Route
+    {
+        foreach (self::$routes as $route) {
+            if ($route->name === $name) {
+                return $route;
+            }
+        }
+
+        throw new Exception("Route with name '$name' not found");
+    }
+
+    public function fillParams(array $params): string
+    {
+        $path = '';
+
+        foreach (explode('/', trim($this->route, '/')) as $part) {
+            if (str_starts_with($part, '{') && str_ends_with($part, '}')) {
+                $param = substr($part, 1, -1);
+                $value = $params[$param];
+                $path .= "/$value";
+            }
+
+            $path .= "/$part";
+        }
+
+        return $path;
     }
 }

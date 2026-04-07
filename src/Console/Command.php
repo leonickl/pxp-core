@@ -13,15 +13,15 @@ class Command
     public static function new(string $command, Closure $action): self
     {
         $new = new self($command, $action);
-        self::$commands[$command] = $new;
+        self::$commands[] = $new;
 
         return $new;
     }
 
     public static function resolve(string $command): ?Closure
     {
-        foreach (self::$commands as $name => $object) {
-            if ($name === $command) {
+        foreach (self::$commands as $object) {
+            if ($object->command === $command) {
                 return $object->action;
             }
         }

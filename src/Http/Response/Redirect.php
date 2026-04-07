@@ -2,6 +2,7 @@
 
 namespace PXP\Http\Response;
 
+use Exception;
 use PXP\Lib\History;
 
 class Redirect extends Response

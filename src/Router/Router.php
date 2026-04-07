@@ -43,7 +43,7 @@ class Router
     }
 
     /**
-     * @return route action for the path-method combination
+     * returns the route action for the path-method combination
      */
     private static function find(string $path, string $method): object
     {

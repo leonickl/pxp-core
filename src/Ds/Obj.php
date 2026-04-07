@@ -5,6 +5,7 @@ namespace PXP\Ds;
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
+use Exception;
 use IteratorAggregate;
 use stdClass;
 use Traversable;
@@ -77,12 +78,12 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
             $new[$key] = $callback($value, $key);
         }
 
-        return self::make($new);
+        return self::make((object) $new);
     }
 
     public function filter(?callable $callback = null): self
     {
-        return self::make(array_filter($this->items, $callback));
+        return self::make((object) array_filter($this->items, $callback));
     }
 
     public function dd(mixed ...$append): void
@@ -92,7 +93,7 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
 
     public function keys(): Vector
     {
-        return Vector::make(array_values(array_keys($this->items)));
+        return Vector::make(array_keys($this->items));
     }
 
     public function values(): Vector
@@ -120,7 +121,7 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
         $items = $this->items;
         usort($items, $compare);
 
-        return self::make($items);
+        return self::make((object) $items);
     }
 
     public function only(int|string ...$keys): self
@@ -131,7 +132,7 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
             $list[] = $this->items[$key];
         }
 
-        return self::make($list);
+        return self::make((object) $list);
     }
 
     public function not(int|string ...$keys): self

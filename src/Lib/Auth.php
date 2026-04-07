@@ -2,7 +2,7 @@
 
 namespace PXP\Lib;
 
-use App\Models\User;
+use PXP\Models\User;
 
 /**
  * Facade for interactive authentication.

@@ -5,6 +5,9 @@ namespace PXP\Data;
 use PXP\Exceptions\ModelNotFoundException;
 use RuntimeException;
 
+/**
+ * @property int $id
+ */
 abstract class Model
 {
     private array $record = [];

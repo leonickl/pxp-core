@@ -2,9 +2,8 @@
 
 namespace PXP\Http\Response;
 
-use PXP\Exceptions\ViewNotFoundException;
-use Override;
 use LeoNickl\Plate\Plate;
+use PXP\Exceptions\ViewNotFoundException;
 
 class View extends Response
 {
@@ -34,7 +33,7 @@ class View extends Response
         if (! file_exists($php)) {
             file_put_contents($php, Plate::file($plate));
         }
-        
+
         return $php;
     }
 
