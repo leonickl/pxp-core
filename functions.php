@@ -8,7 +8,6 @@ use PXP\Http\Response\View;
 use PXP\Http\Response\Plate;
 use PXP\Lib\Arrays;
 use PXP\Lib\Auth;
-use RuntimeException;
 
 function dump(mixed ...$data): void
 {
@@ -106,7 +105,7 @@ function path(string $path = '', bool $internal = false)
     while (! file_exists("$dir/vendor")) {
         $parent = dirname($dir);
         if ($parent === $dir) {
-            throw new RuntimeException('Could not find project root ("vendor" dir not found).');
+            throw new \RuntimeException('Could not find project root ("vendor" dir not found).');
         }
         $dir = $parent;
     }
