@@ -74,6 +74,7 @@ class Route
                 'class' => $route->action[0],
                 'method' => $route->action[1],
                 'middlewares' => $route->middlewares,
+                'history' => $route->history,
             ];
         }
 

@@ -47,9 +47,7 @@ class Router
      */
     private static function find(string $path, string $method): object
     {
-        $routes = Route::listForTree();
-
-        $tree = RouteTree::build($routes);
+        $tree = RouteTree::build(Route::listForTree());
 
         // find current endpoint
         $endpoint = $tree->find($path);
@@ -60,6 +58,7 @@ class Router
                 'method' => 'notFound',
                 'params' => ['route' => $path],
                 'middlewares' => [],
+                'history' => false,
             ];
         }
 
@@ -72,6 +71,7 @@ class Router
                 'method' => 'methodNotSupported',
                 'params' => ['route' => $path, 'method' => $method],
                 'middlewares' => [],
+                'history' => false,
             ];
         }
 
