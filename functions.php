@@ -104,7 +104,7 @@ function path(string $path = '', bool $internal = false)
     }
 
     if ($internal) {
-        $dir .= "/vendor/leonickl/pxp-core";
+        $dir .= '/vendor/leonickl/pxp-core';
     }
 
     return "$dir/$path";
