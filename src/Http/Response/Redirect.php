@@ -7,21 +7,33 @@ use PXP\Lib\History;
 
 class Redirect extends Response
 {
+    /**
+     * @param array<string, mixed> $data
+     */
     private function __construct(private string $path, private array $data) {}
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function path(string $path, array $data = []): Redirect
     {
         return new Redirect($path, $data);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function route(string $route, array $data = []): Redirect
     {
         return new Redirect(route($route), $data);
     }
 
-    public static function back(int $steps = 1, array $data = []): Redirect
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function back(array $data = []): Redirect
     {
-        return new Redirect((new History)->back($steps), $data);
+        return new Redirect((new History)->last(), $data);
     }
 
     public function output(): string

@@ -7,12 +7,18 @@ use PXP\Exceptions\ViewNotFoundException;
 
 class View extends Response
 {
+    /**
+     * @param array<string, mixed> $params
+     */
     private function __construct(
         private string $view,
         private array $params,
         private string $layout,
     ) {}
 
+    /**
+     * @param array<string, mixed> $params
+     */
     public static function make(
         string $view,
         array $params = [],

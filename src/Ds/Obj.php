@@ -10,8 +10,17 @@ use IteratorAggregate;
 use stdClass;
 use Traversable;
 
+/**
+ * TODO: should support only string keys
+ * 
+ * @implements ArrayAccess<string|int, mixed>
+ * @implements IteratorAggregate<string|int, mixed>
+ */
 class Obj implements ArrayAccess, Countable, IteratorAggregate
 {
+    /**
+     * @param array<string|int, mixed> $items
+     */
     private function __construct(private array $items) {}
 
     public static function make(object $items = new stdClass): self
@@ -21,6 +30,7 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
 
     public function offsetExists(mixed $offset): bool
     {
+        // @phpstan-ignore function.alreadyNarrowedType, booleanAnd.alwaysFalse
         if (! is_int($offset) && ! is_string($offset)) {
             throw new Exception('offset must be int or string, '.gettype($offset).' given');
         }
@@ -30,6 +40,7 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
 
     public function offsetGet(mixed $offset): mixed
     {
+        // @phpstan-ignore function.alreadyNarrowedType, booleanAnd.alwaysFalse
         if (! is_int($offset) && ! is_string($offset)) {
             throw new Exception('offset must be int or string, '.gettype($offset).' given');
         }
@@ -48,6 +59,7 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
 
     public function offsetUnset(mixed $offset): void
     {
+        // @phpstan-ignore function.alreadyNarrowedType, booleanAnd.alwaysFalse
         if (! is_int($offset) && ! is_string($offset)) {
             throw new Exception('offset must be int or string, '.gettype($offset).' given');
         }
@@ -55,7 +67,7 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
         unset($this->items[$offset]);
     }
 
-    public function __get(mixed $key)
+    public function __get(mixed $key): mixed
     {
         return $this->items[$key];
     }
@@ -91,16 +103,25 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
         dd($this->items, ...$append);
     }
 
+    /**
+     * @return Vector<string|int>
+     */
     public function keys(): Vector
     {
         return Vector::make(array_keys($this->items));
     }
 
+    /**
+     * @return Vector<mixed>
+     */
     public function values(): Vector
     {
         return Vector::make(array_values($this->items));
     }
 
+    /**
+     * @return array<string|int, mixed>
+     */
     public function toArray(): array
     {
         return $this->items;
@@ -116,7 +137,7 @@ class Obj implements ArrayAccess, Countable, IteratorAggregate
         return new ArrayIterator($this->items);
     }
 
-    public function sort(callable $compare)
+    public function sort(callable $compare): self
     {
         $items = $this->items;
         usort($items, $compare);

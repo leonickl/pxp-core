@@ -4,7 +4,7 @@ namespace PXP\Console;
 
 class CommandRunner
 {
-    public function initDirs()
+    public function initDirs(): void
     {
         foreach (['database', 'log', 'cache'] as $dir) {
             $path = path($dir);
@@ -21,7 +21,7 @@ class CommandRunner
         }
     }
 
-    public function execute(?string $command = null, string ...$args)
+    public function execute(?string $command = null, string ...$args): void
     {
         // internal commands
         require path('commands.php', internal: true);

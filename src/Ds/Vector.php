@@ -9,12 +9,25 @@ use Exception;
 use IteratorAggregate;
 use Traversable;
 
+/**
+ * @template T
+ * @implements ArrayAccess<int, T>
+ * @implements IteratorAggregate<int, T>
+ */
 class Vector implements ArrayAccess, Countable, IteratorAggregate
 {
+    /**
+     * @param list<T> $items
+     */
     private function __construct(private array $items) {}
 
+    /**
+     * @param list<T> $items
+     * @return Vector<T>
+     */
     public static function make(array $items = []): self
     {
+        // @phpstan-ignore function.alreadyNarrowedType
         if (! array_is_list($items)) {
             throw new Exception('Vector must receive a list as input');
         }
@@ -22,7 +35,11 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return new self($items);
     }
 
-    public static function repeat(mixed $value, int $times)
+    /**
+     * @param T $value
+     * @return Vector<T>
+     */
+    public static function repeat(mixed $value, int $times): self
     {
         $array = [];
 
@@ -33,8 +50,12 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return self::make($array);
     }
 
+    /**
+     * @param int $offset
+     */
     public function offsetExists(mixed $offset): bool
     {
+        // @phpstan-ignore function.alreadyNarrowedType
         if (! is_int($offset)) {
             throw new Exception('offset must be int, '.gettype($offset).' given');
         }
@@ -42,8 +63,12 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return isset($this->items[$offset]);
     }
 
+    /**
+     * @param int $offset
+     */
     public function offsetGet(mixed $offset): mixed
     {
+        // @phpstan-ignore function.alreadyNarrowedType
         if (! is_int($offset)) {
             throw new Exception('offset must be int, '.gettype($offset).' given');
         }
@@ -51,8 +76,12 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return $this->items[$offset];
     }
 
+    /**
+     * @param int $offset
+     */
     public function offsetSet(mixed $offset, mixed $value): void
     {
+        // @phpstan-ignore function.alreadyNarrowedType
         if (! is_int($offset)) {
             throw new Exception('offset must be int, '.gettype($offset).' given');
         }
@@ -60,8 +89,12 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         $this->items[$offset] = $value;
     }
 
+    /**
+     * @param int $offset
+     */
     public function offsetUnset(mixed $offset): void
     {
+        // @phpstan-ignore function.alreadyNarrowedType
         if (! is_int($offset)) {
             throw new Exception('offset must be int, '.gettype($offset).' given');
         }
@@ -74,6 +107,11 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return count($this->items);
     }
 
+    /**
+     * @template U
+     * @param callable(T, int=): U $callback
+     * @return Vector<U>
+     */
     public function map(callable $callback): self
     {
         $new = [];
@@ -82,9 +120,14 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
             $new[$key] = $callback($value, $key);
         }
 
+        /** @var Vector<U> */
         return self::make($new);
     }
 
+    /**
+     * @param null|(callable(T): bool) $callback
+     * @return Vector<T>
+     */
     public function filter(?callable $callback = null): self
     {
         return self::make(
@@ -114,11 +157,17 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         dd($this->items, ...$append);
     }
 
+    /**
+     * @return list<T>
+     */
     public function toArray(): array
     {
         return $this->items;
     }
 
+    /**
+     * @return Vector<T>
+     */
     public function reverse(): self
     {
         return self::make(array_reverse($this->items));
@@ -146,6 +195,10 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return new ArrayIterator($this->items);
     }
 
+    /**
+     * @param callable(T, T): int $compare
+     * @return Vector<T>
+     */
     public function sort(callable $compare): self
     {
         $items = $this->items;
@@ -156,6 +209,8 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * flattens out nested vectors
+     * 
+     * @return Vector<mixed>
      */
     public function flatten(): self
     {
@@ -180,11 +235,17 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return self::make($list);
     }
 
+    /**
+     * @return Vector<T>
+     */
     public function with(mixed ...$values): self
     {
         return self::make([...$this->items, ...$values]);
     }
 
+    /**
+     * @return Vector<T>
+     */
     public function without(mixed ...$values): self
     {
         return self::make(
@@ -194,6 +255,9 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         );
     }
 
+    /**
+     * @return Vector<T>
+     */
     public function only(int ...$keys): self
     {
         $list = [];
@@ -205,21 +269,37 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return self::make($list);
     }
 
+    /**
+     * @return Vector<int>
+     */
     public function keys(): self
     {
-        return self::make(array_keys($this->items));
+        /** @var list<int> */
+        $keys = array_keys($this->items);
+
+        /** @var Vector<int> */
+        return self::make($keys);
     }
 
+    /**
+     * @return Vector<T>
+     */
     public function not(int ...$keys): self
     {
         return $this->only(...$this->keys()->without(...$keys));
     }
 
+    /**
+     * @return Vector<T>
+     */
     public function take(int $length): self
     {
         return self::make(array_slice($this->items, 0, $length));
     }
 
+    /**
+     * @param callable(T, int=): void $callback
+     */
     public function each(callable $callback): void
     {
         foreach ($this as $key => $value) {
@@ -232,6 +312,9 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         return in_array($value, $this->items);
     }
 
+    /**
+     * @return Vector<T>
+     */
     public function sample(int $n = 1): self
     {
         $indices = array_rand($this->items, $n);

@@ -132,9 +132,9 @@ function auth(): bool
     return Auth::auth();
 }
 
-function back(int $steps = 1, array $data = []): Redirect
+function back(array $data = []): Redirect
 {
-    return Redirect::back($steps, $data);
+    return Redirect::back($data);
 }
 
 function route(string $name, array $params = []): string

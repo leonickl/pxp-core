@@ -4,27 +4,31 @@ namespace PXP\Data;
 
 use PXP\Exceptions\ModelNotFoundException;
 use RuntimeException;
+use PXP\Ds\Vector;
 
 /**
  * @property int $id
  */
 abstract class Model
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $record = [];
 
     final private function __construct(private bool $exists = false) {}
 
-    public function __get(string $attr)
+    public function __get(string $attr): mixed
     {
         return @$this->record[$attr];
     }
 
-    public function __set(string $attr, mixed $value)
+    public function __set(string $attr, mixed $value): void
     {
         $this->record[$attr] = $value;
     }
 
-    public function fill(mixed ...$data)
+    public function fill(mixed ...$data): static
     {
         foreach ($data as $key => $value) {
             $this->record[$key] = $value;
@@ -33,7 +37,7 @@ abstract class Model
         return $this;
     }
 
-    private static function table()
+    private static function table(): string
     {
         $object = new static;
 
@@ -45,34 +49,34 @@ abstract class Model
         return $object->table;
     }
 
-    public static function all()
+    /**
+     * @return Vector<static>
+     */
+    public static function all(): Vector
     {
         $list = DB::init()->all(self::table());
 
-        return v(...$list)->map(fn (array $record) => (new static(true))->fill(...$record));
+        return v(...$list)->map(fn (array $record) => (new static(exists: true))->fill(...$record));
     }
 
-    public static function find(int $id)
+    public static function find(int $id): static
     {
         return static::findBy('id', $id);
     }
 
-    public static function findBy(string $column, mixed $value)
+    public static function findBy(string $column, mixed $value): static
     {
-        $object = new static(true);
-
         $record = DB::init()->find(self::table(), $column, $value);
-
+        
         if (! $record) {
             throw new ModelNotFoundException(static::class, $column, $value);
         }
-
-        $object->fill(...$record);
-
-        return $object;
+            
+        return new static(exists: true)
+            ->fill(...$record);
     }
 
-    public static function findOrNull(?int $id)
+    public static function findOrNull(?int $id): ?static
     {
         if ($id === null) {
             return null;
@@ -85,7 +89,7 @@ abstract class Model
         }
     }
 
-    public static function findByOrNull(string $column, mixed $value)
+    public static function findByOrNull(string $column, mixed $value): ?static
     {
         try {
             return static::findBy($column, $value);
@@ -94,23 +98,26 @@ abstract class Model
         }
     }
 
-    public static function findAllBy(string $column, mixed $value)
+    /**
+     * @return Vector<static>
+     */
+    public static function findAllBy(string $column, mixed $value): Vector
     {
         return v(...DB::init()->findAll(self::table(), $column, $value))
             ->map(fn (array $record) => new static(exists: true)->fill(...$record));
     }
 
-    public static function new(mixed ...$props)
+    public static function new(mixed ...$props): static
     {
         return (new static)->fill(...$props);
     }
 
-    public static function create(mixed ...$props)
+    public static function create(mixed ...$props): static
     {
         return self::new(...$props)->save();
     }
 
-    public function save()
+    public function save(): static
     {
         $updated = $this->exists
             ? DB::init()->update(self::table(), $this->record)
@@ -123,17 +130,17 @@ abstract class Model
         return $this;
     }
 
-    public function delete()
+    public function delete(): void
     {
         DB::init()->delete(self::table(), $this->id);
     }
 
-    public function dd()
+    public function dd(): never
     {
         dd($this->record);
     }
 
-    public function dump()
+    public function dump(): static
     {
         dump($this->record);
 

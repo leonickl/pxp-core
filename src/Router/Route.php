@@ -8,9 +8,14 @@ class Route
 {
     /**
      * store all defined routes
+     * @var list<Route> $routes
      */
     private static array $routes = [];
 
+    /**
+     * @param null|array{class-string, string} $action
+     * @param list<class-string<\PXP\Http\Middleware\Middleware>> $middlewares
+     */
     private function __construct(
         private readonly string $route,
         private readonly string $method,
@@ -54,7 +59,7 @@ class Route
         return $this;
     }
 
-    public function history(bool $history)
+    public function history(bool $history): self
     {
         $this->history = $history;
 
@@ -68,6 +73,14 @@ class Route
         return $this;
     }
 
+    /**
+     * @return array<string, array<string, array{
+     *     'class': class-string<\PXP\Http\Controllers\Controller>,
+     *     'method': string,
+     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>,
+     *     'history': bool|null
+     * }>>
+     */
     public static function listForTree(): array
     {
         $routes = [];
@@ -88,7 +101,7 @@ class Route
         return $routes;
     }
 
-    public static function group(Route ...$routes)
+    public static function group(Route ...$routes): Group
     {
         return new Group(v(...$routes));
     }
@@ -104,6 +117,9 @@ class Route
         throw new Exception("Route with name '$name' not found");
     }
 
+    /**
+     * @param array<string, string|int> $params
+     */
     public function fillParams(array $params): string
     {
         $path = '';

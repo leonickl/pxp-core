@@ -4,13 +4,16 @@ namespace PXP\Lib;
 
 class History
 {
+    /**
+     * @return list<string>
+     */
     public function history(): array
     {
         return session()->array('history');
     }
 
-    public function back(int $steps = 1): string
+    public function last(): string
     {
-        return $this->history()[$steps - 1] ?? '/';
+        return $this->history()[0] ?? '/';
     }
 }

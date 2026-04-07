@@ -6,8 +6,14 @@ use RuntimeException;
 
 class Arrays
 {
+    /**
+     * @param array<string, mixed> $array
+     */
     public function __construct(private array &$array) {}
 
+    /**
+     * @param string|array<string, mixed>|list<string>|null $key
+     */
     public function access(string|array|null $key = null): mixed
     {
         if (is_string($key)) {
@@ -35,6 +41,9 @@ class Arrays
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return $this->array;
@@ -87,6 +96,9 @@ class Arrays
         return $this->access($key) !== null;
     }
 
+    /**
+     * @return array<mixed, mixed>
+     */
     public function array(string $key): array
     {
         $data = $this->access($key);

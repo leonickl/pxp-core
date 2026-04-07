@@ -4,16 +4,31 @@ namespace PXP\Router;
 
 class RouteTree
 {
+    /**
+     * @var array<string, string>
+     */
     private static array $params = [];
 
+    /**
+     * @param array<string, RouteTree|null> $children
+     * @param array<mixed, mixed> $methods // TODO: fix types
+     */
     private function __construct(private array $children, private array $methods) {}
 
-    private static function empty()
+    private static function empty(): self
     {
         return new self(children: [], methods: []);
     }
 
-    public static function build(array $routes)
+    /**
+     * @param array<string, array<string, array{
+     *     'class': class-string<\PXP\Http\Controllers\Controller>,
+     *     'method': string,
+     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>,
+     *     'history': bool|null
+     * }>> $routes
+     */
+    public static function build(array $routes): self
     {
         $tree = self::empty();
 

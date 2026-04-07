@@ -6,6 +6,9 @@ use Closure;
 
 class Command
 {
+    /**
+     * @var Command[]
+     */
     private static array $commands = [];
 
     private function __construct(private string $command, private Closure $action) {}
