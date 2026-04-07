@@ -28,16 +28,15 @@ class App
 
             return json_encode($response);
         } catch (UnauthorizedException) {
-            return View::make('error.unauthorized')->layout('app')->render();
+            return View::make('error.unauthorized')->render();
         } catch (ValidationException $e) {
             return View::make('error.validation', ['error' => $e->getMessage()])
-                ->layout('app')
                 ->render();
         } catch (Throwable $e) {
             Log::log('Error ('.$e::class.'): '
                 .$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
 
-            return View::make('error')->layout('app')->render();
+            return View::make('error')->render();
         }
     }
 }
