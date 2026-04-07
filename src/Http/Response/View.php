@@ -6,7 +6,7 @@ use PXP\Exceptions\ViewNotFoundException;
 use Override;
 use LeoNickl\Plate\Plate;
 
-class View extends Template
+class View extends Response
 {
     private function __construct(
         private string $view,
