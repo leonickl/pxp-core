@@ -5,6 +5,7 @@ use PXP\Ds\Obj;
 use PXP\Ds\Vector;
 use PXP\Html\View;
 use PXP\Lib\Arrays;
+use PXP\Http\Response\Redirect;
 
 function dump(mixed ...$data): void
 {
@@ -123,4 +124,9 @@ function perma(string|array $name, mixed $default = null)
 function auth(): bool
 {
     return PXP\Lib\Auth::auth();
+}
+
+function back(array $data = []): Redirect
+{
+    return Redirect::back($data);
 }

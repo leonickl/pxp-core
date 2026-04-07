@@ -11,7 +11,9 @@ class History extends Middleware
     public function apply(object $route = new stdClass): mixed
     {
         if ($this->history($route)) {
-            // TODO: log to history here
+            session([
+                'history' => [$route, ...session()->array('history')],
+            ]);
         }
 
         return true;

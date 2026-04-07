@@ -88,6 +88,10 @@ class Arrays
     {
         $data = $this->access($key);
 
+        if ($data === null) {
+            return [];
+        }
+
         if (! is_array($data)) {
             throw new RuntimeException("'$key' is not an array");
         }

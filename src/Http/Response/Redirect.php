@@ -2,6 +2,8 @@
 
 namespace PXP\Http\Response;
 
+use PXP\Lib\History;
+
 class Redirect extends Response
 {
     private function __construct(private string $path, private array $data) {}
@@ -14,6 +16,11 @@ class Redirect extends Response
     public static function route(string $route, array $data = []): Redirect
     {
         return new Redirect(route($route), $data);
+    }
+
+    public static function back(array $data = []): Redirect
+    {
+        return new Redirect((new History)->last(), $data);
     }
 
     public function output(): string
