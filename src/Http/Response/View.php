@@ -17,7 +17,7 @@ class View extends Response
         array $params = [],
         string $layout = 'app',
     ): self {
-        return new self($view, $params);
+        return new self($view, $params, $layout);
     }
 
     protected function find(): string
