@@ -5,6 +5,7 @@ use PXP\Ds\Obj;
 use PXP\Ds\Vector;
 use PXP\Http\Response\Redirect;
 use PXP\Http\Response\View;
+use PXP\Http\Response\Plate;
 use PXP\Lib\Arrays;
 use PXP\Lib\Auth;
 use RuntimeException;
@@ -30,6 +31,11 @@ function dd(mixed ...$data): never
 function view(string $view, array $params = [], string $layout = 'app'): View
 {
     return View::make($view, $params);
+}
+
+function plate(string $view, array $params = [], string $layout = 'app'): Plate
+{
+    return Plate::make($view, $params);
 }
 
 function v(mixed ...$items): Vector

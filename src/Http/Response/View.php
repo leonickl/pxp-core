@@ -6,7 +6,7 @@ use PXP\Exceptions\ViewNotFoundException;
 
 class View extends Response
 {
-    private function __construct(
+    protected function __construct(
         protected string $view,
         protected array $params,
         protected string $layout,
@@ -20,7 +20,7 @@ class View extends Response
         return new self($view, $params);
     }
 
-    private function find(): string
+    protected function find(): string
     {
         // user-defined views
         $user = path("views/$this->view.php");

@@ -4,8 +4,46 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "685c0621e4c832871921180bc2d4dc7c",
-    "packages": [],
+    "content-hash": "800effc6dbf399c83f3288176076d991",
+    "packages": [
+        {
+            "name": "leonickl/plate",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/leonickl/plate.git",
+                "reference": "558454bdf534410e5539629caa221ad3db83d3ad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/leonickl/plate/zipball/558454bdf534410e5539629caa221ad3db83d3ad",
+                "reference": "558454bdf534410e5539629caa221ad3db83d3ad",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LeoNickl\\Plate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Leo Nickl",
+                    "email": "leo@leonickl.de"
+                }
+            ],
+            "description": "A PHP templating engine",
+            "support": {
+                "issues": "https://github.com/leonickl/plate/issues",
+                "source": "https://github.com/leonickl/plate/tree/v1.0.0"
+            },
+            "time": "2026-04-07T14:47:06+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "laravel/pint",
