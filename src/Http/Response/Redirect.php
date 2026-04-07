@@ -18,9 +18,9 @@ class Redirect extends Response
         return new Redirect(route($route), $data);
     }
 
-    public static function back(array $data = []): Redirect
+    public static function back(int $steps = 1, array $data = []): Redirect
     {
-        return new Redirect((new History)->last(), $data);
+        return new Redirect((new History)->back($steps), $data);
     }
 
     public function output(): string

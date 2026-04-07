@@ -130,7 +130,7 @@ function auth(): bool
     return PXP\Lib\Auth::auth();
 }
 
-function back(array $data = []): Redirect
+function back(int $steps = 1, array $data = []): Redirect
 {
-    return Redirect::back($data);
+    return Redirect::back(steps, $data);
 }

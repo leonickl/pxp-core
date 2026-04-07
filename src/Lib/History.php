@@ -9,8 +9,8 @@ class History
         return session()->array('history');
     }
 
-    public function last(): string
+    public function back(int $steps = 1): string
     {
-        return $this->history()[0] ?? '/';
+        return $this->history()[$steps - 1] ?? '/';
     }
 }
