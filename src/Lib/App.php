@@ -4,7 +4,7 @@ namespace PXP\Lib;
 
 use PXP\Exceptions\UnauthorizedException;
 use PXP\Exceptions\ValidationException;
-use PXP\Html\View;
+use PXP\Http\Response\Response;
 use PXP\Router\Router;
 use Throwable;
 
@@ -17,8 +17,8 @@ class App
         try {
             $response = Router::route();
 
-            if ($response instanceof View) {
-                return $response->layout('app')->render();
+            if ($response instanceof Response) {
+                return $response->output();
             }
 
             if (is_string($response)) {

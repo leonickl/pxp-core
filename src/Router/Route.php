@@ -15,6 +15,7 @@ class Route
 
         private ?string $name = null,
         private ?array $action = null,
+        private ?bool $history = null,
 
         private array $middlewares = [],
     ) {}
@@ -23,7 +24,6 @@ class Route
     {
         $new = new self($route, $method);
         self::$routes[] = $new;
-
         return $new;
     }
 
@@ -40,21 +40,24 @@ class Route
     public function name(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
     public function do(string $controller, string $method): self
     {
         $this->action = [$controller, $method];
+        return $this;
+    }
 
+    public function history(bool $history)
+    {
+        $this->history = $history;
         return $this;
     }
 
     public function middleware(string $middleware): self
     {
         $this->middlewares[] = $middleware;
-
         return $this;
     }
 

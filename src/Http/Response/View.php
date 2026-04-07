@@ -1,12 +1,17 @@
 <?php
 
-namespace PXP\Html;
+namespace PXP\Http\Response;
 
 use PXP\Exceptions\ViewNotFoundException;
+use PXP\Http\Response;
 
-class View
+class View extends Response
 {
-    private function __construct(protected string $view, protected array $params) {}
+    private function __construct(
+        protected string $view, 
+        protected array $params, 
+        protected string $layout = 'app',
+    ) {}
 
     public static function make(string $view, array $params = []): self
     {
@@ -55,5 +60,10 @@ class View
     public function __toString()
     {
         return $this->render();
+    }
+
+    public function output(): string
+    {
+        return $this->layout($this->layout);
     }
 }

@@ -7,23 +7,31 @@ use PXP\Lib\Session;
 
 class Router
 {
+    /**
+     * bring request uri to format "/some/uri" and strip query part
+     */
+    public static function path(): string
+    {
+        $uri = '/'.trim($_SERVER['REQUEST_URI'], "/\r\n\t ");
+        return parse_url($uri, PHP_URL_PATH);
+    }
+
+    /**
+     * get method either by request parameter or "real" HTTP method
+     */
+    public static function method(): string
+    {
+        return strtoupper($_REQUEST['__method'] ?? $_SERVER['REQUEST_METHOD']);
+    }
+
     public static function route(): mixed
     {
-        // bring request uri to format "/some/uri"
-        $uri = '/'.trim($_SERVER['REQUEST_URI'], "/\r\n\t ");
-
-        // strip query part
-        $path = parse_url($uri, PHP_URL_PATH);
-
-        // get method either by request parameter or "real" HTTP method
-        $method = strtoupper($_REQUEST['__method'] ?? $_SERVER['REQUEST_METHOD']);
-
         // find current path-method combination in route tree
-        $content = self::find($path, $method);
+        $content = self::find(Router::path(), Router::method());
 
         // apply middlewares
         foreach ($content->middlewares as $middleware) {
-            $status = (new $middleware)->apply();
+            $status = (new $middleware)->apply($content);
 
             if ($status !== true) {
                 return $status;
@@ -71,14 +79,5 @@ class Router
         $action['params'] = $tree->param(); // associative array of route-params
 
         return (object) $action;
-    }
-
-    public static function redirect(string $uri, array $data = [])
-    {
-        if ($data) {
-            Session::setAll($data);
-        }
-
-        header("location: $uri");
     }
 }
