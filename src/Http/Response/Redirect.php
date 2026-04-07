@@ -33,7 +33,7 @@ class Redirect extends Response
             throw new Exception("Invalid redirect path '$this->path'");
         }
 
-        header("location: $uri");
+        header("location: $this->path");
 
         return '';
     }
