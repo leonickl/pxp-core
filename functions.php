@@ -91,16 +91,20 @@ function env(?string $key = null, mixed $default = null)
     return $env;
 }
 
-function path(string $path = '')
+function path(string $path = '', bool $internal = false)
 {
     $dir = __DIR__;
 
     while (! file_exists("$dir/vendor")) {
         $parent = dirname($dir);
         if ($parent === $dir) {
-            throw new \RuntimeException('Could not find project root (composer.json not found).');
+            throw new \RuntimeException('Could not find project root ("vendor" dir not found).');
         }
         $dir = $parent;
+    }
+
+    if ($internal) {
+        $dir .= "/vendor/leonickl/pxp-core";
     }
 
     return "$dir/$path";

@@ -3,7 +3,6 @@
 namespace PXP\Http\Response;
 
 use PXP\Exceptions\ViewNotFoundException;
-use PXP\Http\Response;
 
 class View extends Response
 {
@@ -28,7 +27,7 @@ class View extends Response
         }
 
         // framework-internal views
-        $internal = __DIR__."/../../views/$this->view.php";
+        $internal = path("views/$this->view.php", internal: true);
 
         if (file_exists($internal)) {
             return $internal;

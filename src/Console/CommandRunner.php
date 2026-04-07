@@ -24,7 +24,7 @@ class CommandRunner
     public function execute(?string $command = null, string ...$args)
     {
         // internal commands
-        require __DIR__.'/../../commands.php';
+        require path('commands.php', internal: true);
 
         // user commands
         $file = path('commands.php');

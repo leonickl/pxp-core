@@ -21,6 +21,6 @@ class AssetController
 
         header('Content-Type: text/css');
 
-        return file_get_contents(__DIR__."/../../../assets/css/$file.css");
+        return file_get_contents(path("assets/css/$file.css", internal: true));
     }
 }
