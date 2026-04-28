@@ -10,8 +10,8 @@ class RouteTree
     private static array $params = [];
 
     /**
-     * @param array<string, RouteTree|null> $children
-     * @param array<mixed, mixed> $methods // TODO: fix types
+     * @param  array<string, RouteTree|null>  $children
+     * @param  array<mixed, mixed>  $methods  // TODO: fix types
      */
     private function __construct(private array $children, private array $methods) {}
 

@@ -5,8 +5,8 @@ namespace PXP\Data;
 use Exception;
 use PDO;
 use PDOException;
-use PXP\Lib\Log;
 use PXP\Ds\Vector;
+use PXP\Lib\Log;
 
 class DB
 {
@@ -29,7 +29,7 @@ class DB
     }
 
     /**
-     * @param array<string, string> $columns
+     * @param  array<string, string>  $columns
      */
     public function create(string $table, array $columns): void
     {
@@ -101,7 +101,7 @@ class DB
     }
 
     /**
-     * @param array<string, mixed> $record
+     * @param  array<string, mixed>  $record
      * @return array<string, mixed>
      */
     public function insert(string $table, array $record): array
@@ -133,7 +133,7 @@ class DB
     }
 
     /**
-     * @param array<string, mixed> $record
+     * @param  array<string, mixed>  $record
      * @return array<string, mixed>
      */
     public function update(string $table, array $record): array
@@ -184,7 +184,7 @@ class DB
     }
 
     /**
-     * @param array<string, string> $columns
+     * @param  array<string, string>  $columns
      */
     public function addColumns(string $table, array $columns): void
     {
@@ -220,7 +220,7 @@ class DB
     }
 
     /**
-     * @param array<string|int, mixed> $data
+     * @param  array<string|int, mixed>  $data
      * @return Vector<array<string, mixed>>
      */
     public function select(string $sql, array $data = []): Vector

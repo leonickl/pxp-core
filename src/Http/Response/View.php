@@ -8,7 +8,7 @@ use PXP\Exceptions\ViewNotFoundException;
 class View extends Response
 {
     /**
-     * @param array<string, mixed> $params
+     * @param  array<string, mixed>  $params
      */
     private function __construct(
         private string $view,
@@ -17,7 +17,7 @@ class View extends Response
     ) {}
 
     /**
-     * @param array<string, mixed> $params
+     * @param  array<string, mixed>  $params
      */
     public static function make(
         string $view,

@@ -2,9 +2,9 @@
 
 namespace PXP\Data;
 
+use PXP\Ds\Vector;
 use PXP\Exceptions\ModelNotFoundException;
 use RuntimeException;
-use PXP\Ds\Vector;
 
 /**
  * @property int $id
@@ -67,11 +67,11 @@ abstract class Model
     public static function findBy(string $column, mixed $value): static
     {
         $record = DB::init()->find(self::table(), $column, $value);
-        
+
         if (! $record) {
             throw new ModelNotFoundException(static::class, $column, $value);
         }
-            
+
         return new static(exists: true)
             ->fill(...$record);
     }

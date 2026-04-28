@@ -11,18 +11,19 @@ use Traversable;
 
 /**
  * @template T
+ *
  * @implements ArrayAccess<int, T>
  * @implements IteratorAggregate<int, T>
  */
 class Vector implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
-     * @param list<T> $items
+     * @param  list<T>  $items
      */
     private function __construct(private array $items) {}
 
     /**
-     * @param list<T> $items
+     * @param  list<T>  $items
      * @return Vector<T>
      */
     public static function make(array $items = []): self
@@ -36,7 +37,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * @param T $value
+     * @param  T  $value
      * @return Vector<T>
      */
     public static function repeat(mixed $value, int $times): self
@@ -51,7 +52,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * @param int $offset
+     * @param  int  $offset
      */
     public function offsetExists(mixed $offset): bool
     {
@@ -64,7 +65,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * @param int $offset
+     * @param  int  $offset
      */
     public function offsetGet(mixed $offset): mixed
     {
@@ -77,7 +78,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * @param int $offset
+     * @param  int  $offset
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
@@ -90,7 +91,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * @param int $offset
+     * @param  int  $offset
      */
     public function offsetUnset(mixed $offset): void
     {
@@ -109,7 +110,8 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * @template U
-     * @param callable(T, int=): U $callback
+     *
+     * @param  callable(T, int=): U  $callback
      * @return Vector<U>
      */
     public function map(callable $callback): self
@@ -125,7 +127,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * @param null|(callable(T): bool) $callback
+     * @param  null|(callable(T): bool)  $callback
      * @return Vector<T>
      */
     public function filter(?callable $callback = null): self
@@ -196,7 +198,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * @param callable(T, T): int $compare
+     * @param  callable(T, T): int  $compare
      * @return Vector<T>
      */
     public function sort(callable $compare): self
@@ -209,7 +211,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * flattens out nested vectors
-     * 
+     *
      * @return Vector<mixed>
      */
     public function flatten(): self
@@ -298,7 +300,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * @param callable(T, int=): void $callback
+     * @param  callable(T, int=): void  $callback
      */
     public function each(callable $callback): void
     {

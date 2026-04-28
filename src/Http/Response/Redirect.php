@@ -8,12 +8,12 @@ use PXP\Lib\History;
 class Redirect extends Response
 {
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     private function __construct(private string $path, private array $data) {}
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public static function path(string $path, array $data = []): Redirect
     {
@@ -21,7 +21,7 @@ class Redirect extends Response
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public static function route(string $route, array $data = []): Redirect
     {
@@ -29,7 +29,7 @@ class Redirect extends Response
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public static function back(array $data = []): Redirect
     {

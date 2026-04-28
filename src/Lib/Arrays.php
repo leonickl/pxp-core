@@ -7,12 +7,12 @@ use RuntimeException;
 class Arrays
 {
     /**
-     * @param array<string, mixed> $array
+     * @param  array<string, mixed>  $array
      */
     public function __construct(private array &$array) {}
 
     /**
-     * @param string|array<string, mixed>|list<string>|null $key
+     * @param  string|array<string, mixed>|list<string>|null  $key
      */
     public function access(string|array|null $key = null): mixed
     {

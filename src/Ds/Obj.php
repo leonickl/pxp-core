@@ -12,14 +12,14 @@ use Traversable;
 
 /**
  * TODO: should support only string keys
- * 
+ *
  * @implements ArrayAccess<string|int, mixed>
  * @implements IteratorAggregate<string|int, mixed>
  */
 class Obj implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
-     * @param array<string|int, mixed> $items
+     * @param  array<string|int, mixed>  $items
      */
     private function __construct(private array $items) {}
 

@@ -8,13 +8,14 @@ class Route
 {
     /**
      * store all defined routes
-     * @var list<Route> $routes
+     *
+     * @var list<Route>
      */
     private static array $routes = [];
 
     /**
-     * @param null|array{class-string, string} $action
-     * @param list<class-string<\PXP\Http\Middleware\Middleware>> $middlewares
+     * @param  null|array{class-string, string}  $action
+     * @param  list<class-string<\PXP\Http\Middleware\Middleware>>  $middlewares
      */
     private function __construct(
         private readonly string $route,
@@ -118,7 +119,7 @@ class Route
     }
 
     /**
-     * @param array<string, string|int> $params
+     * @param  array<string, string|int>  $params
      */
     public function fillParams(array $params): string
     {

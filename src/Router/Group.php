@@ -7,7 +7,7 @@ use PXP\Ds\Vector;
 class Group
 {
     /**
-     * @param Vector<Route> $routes
+     * @param  Vector<Route>  $routes
      */
     public function __construct(private Vector $routes) {}
 
