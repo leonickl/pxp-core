@@ -139,3 +139,12 @@ Command::new('create-user', function (?string $username, ?string $password) {
 
     echo "created user with id $user->id\n";
 });
+
+Command::new('cache', function (?string $command) {
+    if ($command === 'clear') {
+        rmdir(path('cache'));
+        exit("cleared cache\n");
+    }
+
+    exit("enter command, e.g. clear\n");
+});
