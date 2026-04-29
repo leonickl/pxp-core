@@ -1,6 +1,7 @@
 <?php
 
 use PXP\Data\PermamentVariable;
+use PXP\Data\Validate\Validator;
 use PXP\Ds\Obj;
 use PXP\Ds\Vector;
 use PXP\Http\Response\Redirect;
@@ -141,4 +142,9 @@ function route(string $name, array $params = []): string
 {
     return Route::findByName($name)
         ->fillParams($params);
+}
+
+function validate(mixed $var, string $name = 'variable'): Validator
+{
+    return new Validator($var, $name);
 }
