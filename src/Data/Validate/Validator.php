@@ -32,7 +32,7 @@ class Validator
      */
     public function __call(string $method, array $args): self
     {
-        if (in_array($method, ['string', 'int', 'float'])) {
+        if (in_array($method, ['string', 'int', 'float', 'array'])) {
             $this->type = $method;
 
             return $this;
@@ -90,6 +90,19 @@ class Validator
 
                 return $this;
             }
+        }
+
+        if ($method === 'in') {
+            if ($this->type === 'string') {
+                $this->guards[] = new Guard(
+                    fn () => in_array($this->var, $args),
+                    fn () => "$this->name must be one of ".implode(', ', $args),
+                );
+
+                return $this;
+            }
+
+            throw new Exception("'in' not valid for type '$this->type'");
         }
 
         throw new Exception("unknown validation rule $method");
