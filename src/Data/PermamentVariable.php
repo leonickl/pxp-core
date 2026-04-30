@@ -17,7 +17,11 @@ class PermamentVariable
             return $default;
         }
 
-        return unserialize(file_get_contents($this->file()));
+        $contents = file_get_contents($this->file());
+
+        return $contents === false
+            ? $default
+            : unserialize($contents);
     }
 
     public function set(mixed $value): void

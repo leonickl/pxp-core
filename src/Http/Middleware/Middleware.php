@@ -5,8 +5,8 @@ namespace PXP\Http\Middleware;
 abstract class Middleware
 {
     /**
-     * @return true if everything is okay
-     *              otherwise a result displayed to the user
+     * Returns true if everything is okay, otherwise
+     * a result to be displayed to the user.
      */
     abstract public function apply(): mixed;
 }

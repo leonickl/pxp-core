@@ -18,12 +18,18 @@ class Validator
 
     private bool $nullable = false;
 
+    /**
+     * @var list<Guard>
+     */
     private array $guards = [];
 
     private bool $throw = true;
 
     public function __construct(private mixed $var, private string $name) {}
 
+    /**
+     * @param  list<mixed>  $args
+     */
     public function __call(string $method, array $args): self
     {
         if (in_array($method, ['string', 'int', 'float'])) {
@@ -106,6 +112,7 @@ class Validator
             }
         }
 
+        /** @phpstan-ignore callable.nonCallable */
         if (! "is_$this->type"($this->var)) {
             $errors[] = new ValidationException("$this->name must be of type $this->type");
         }

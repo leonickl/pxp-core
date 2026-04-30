@@ -31,7 +31,7 @@ abstract class Model
     public function fill(mixed ...$data): static
     {
         foreach ($data as $key => $value) {
-            $this->record[$key] = $value;
+            $this->record[(string) $key] = $value;
         }
 
         return $this;

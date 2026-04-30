@@ -64,7 +64,7 @@ class DB
         $stmt = $this->pdo->prepare("select * from $table where deleted_at is null;");
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return array_values($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
     /**
@@ -75,7 +75,7 @@ class DB
         $stmt = $this->pdo->prepare("select * from $table where deleted_at is not null;");
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return array_values($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
     /**
@@ -97,7 +97,7 @@ class DB
         $stmt = $this->pdo->prepare("select * from $table where $column = ? and deleted_at is null;");
         $stmt->execute([$value]);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return array_values($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
     /**
@@ -116,16 +116,13 @@ class DB
 
         $placeholders = o(...$record)
             ->keys()
-            ->map(fn (string $key) => ":$key")
+            ->map(fn (int|string $key) => ":$key")
             ->join(', ');
 
         $sql = "insert into `$table` ($columns) values ($placeholders);";
 
-        $status = $this->pdo->prepare($sql)->execute($record);
-
-        if ($status === false) {
-            throw new Exception('creating record failed');
-        }
+        $status = $this->pdo->prepare($sql)->execute($record)
+            ?: error(Exception::class, 'creating record failed');
 
         $id = $record['id'] ?? $this->pdo->lastInsertId();
 
@@ -158,11 +155,8 @@ class DB
             ->values()
             ->toArray();
 
-        $status = $this->pdo->prepare($sql)->execute($values);
-
-        if ($status === false) {
-            throw new Exception('creating record failed');
-        }
+        $status = $this->pdo->prepare($sql)->execute($values)
+            ?: error(Exception::class, 'creating record failed');
 
         return $this->find($table, 'id', $id);
     }
@@ -172,7 +166,10 @@ class DB
      */
     public function columnInfos(string $table): Vector
     {
-        return v(...$this->pdo->query("pragma table_info(`$table`)")->fetchAll(PDO::FETCH_ASSOC));
+        $stmt = $this->pdo->query("pragma table_info(`$table`)")
+            ?: error(Exception::class, "Failed to get column info for table: $table");
+
+        return v(...$stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
     /**
@@ -214,9 +211,11 @@ class DB
      */
     public function tables(): array
     {
-        return $this->pdo
+        $stmt = $this->pdo
             ->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
-            ->fetchAll(PDO::FETCH_COLUMN);
+                ?: error(Exception::class, 'Failed to get table list');
+
+        return array_values($stmt->fetchAll(PDO::FETCH_COLUMN));
     }
 
     /**

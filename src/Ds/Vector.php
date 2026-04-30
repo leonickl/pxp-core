@@ -87,7 +87,10 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
             throw new Exception('offset must be int, '.gettype($offset).' given');
         }
 
-        $this->items[$offset] = $value;
+        // rebuild to ensure it remains a list
+        $new = $this->items;
+        $new[$offset] = $value;
+        $this->items = array_values($new);
     }
 
     /**
@@ -100,7 +103,10 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
             throw new Exception('offset must be int, '.gettype($offset).' given');
         }
 
-        unset($this->items[$offset]);
+        // rebuild to ensure it remains a list
+        $new = $this->items;
+        unset($new[$offset]);
+        $this->items = array_values($new);
     }
 
     public function count(): int
@@ -123,7 +129,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         }
 
         /** @var Vector<U> */
-        return self::make($new);
+        return self::make(array_values($new));
     }
 
     /**
@@ -242,7 +248,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
      */
     public function with(mixed ...$values): self
     {
-        return self::make([...$this->items, ...$values]);
+        return self::make([...$this->items, ...array_values($values)]);
     }
 
     /**
@@ -279,7 +285,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         /** @var list<int> */
         $keys = array_keys($this->items);
 
-        /** @var Vector<int> */
+        // @phpstan-ignore return.type, argument.type
         return self::make($keys);
     }
 

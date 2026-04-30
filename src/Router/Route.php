@@ -14,7 +14,7 @@ class Route
     private static array $routes = [];
 
     /**
-     * @param  null|array{class-string, string}  $action
+     * @param  null|array{class-string<\PXP\Http\Controllers\Controller>, string}  $action
      * @param  list<class-string<\PXP\Http\Middleware\Middleware>>  $middlewares
      */
     private function __construct(
@@ -23,7 +23,6 @@ class Route
 
         private ?string $name = null,
         private ?array $action = null,
-        private ?bool $history = null,
 
         private array $middlewares = [],
     ) {}
@@ -55,32 +54,22 @@ class Route
 
     public function do(string $controller, string $method): self
     {
+        /** @var class-string<\PXP\Http\Controllers\Controller> $controller */
         $this->action = [$controller, $method];
-
-        return $this;
-    }
-
-    public function history(bool $history): self
-    {
-        $this->history = $history;
 
         return $this;
     }
 
     public function middleware(string $middleware): self
     {
+        /** @var class-string<\PXP\Http\Middleware\Middleware> $middleware */
         $this->middlewares[] = $middleware;
 
         return $this;
     }
 
     /**
-     * @return array<string, array<string, array{
-     *     'class': class-string<\PXP\Http\Controllers\Controller>,
-     *     'method': string,
-     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>,
-     *     'history': bool|null
-     * }>>
+     * @return array<string, array<string, RouteAction>>
      */
     public static function listForTree(): array
     {
@@ -91,12 +80,17 @@ class Route
                 $routes[$route->route] = [];
             }
 
-            $routes[$route->route][$route->method] = [
-                'class' => $route->action[0],
-                'method' => $route->action[1],
-                'middlewares' => $route->middlewares,
-                'history' => $route->history,
-            ];
+            if ($route->action === null) {
+                continue;
+            }
+
+            $action = new RouteAction;
+
+            $action->class = $route->action[0];
+            $action->method = $route->action[1];
+            $action->middlewares = $route->middlewares;
+
+            $routes[$route->route][$route->method] = $action;
         }
 
         return $routes;

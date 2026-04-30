@@ -11,9 +11,9 @@ class RouteTree
 
     /**
      * @param  array<string, RouteTree|null>  $children
-     * @param  array<mixed, mixed>  $methods  // TODO: fix types
+     * @param  array<string, RouteAction>  $methods
      */
-    private function __construct(private array $children, private array $methods) {}
+    private function __construct(private array $children, private array $methods = []) {}
 
     private static function empty(): self
     {
@@ -21,12 +21,7 @@ class RouteTree
     }
 
     /**
-     * @param array<string, array<string, array{
-     *     'class': class-string<\PXP\Http\Controllers\Controller>,
-     *     'method': string,
-     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>,
-     *     'history': bool|null
-     * }>> $routes
+     * @param array<string, array<string, RouteAction>> $routes
      */
     public static function build(array $routes): self
     {
@@ -35,7 +30,7 @@ class RouteTree
         foreach ($routes as $route => $content) {
             $split = explode('/', trim($route, '/'));
 
-            $tree->children($split)->methods($content);
+            $tree->children($split)?->methods($content);
         }
 
         return $tree;
@@ -50,6 +45,9 @@ class RouteTree
         return $this->children[$key];
     }
 
+    /**
+     * @param  list<string>  $keys
+     */
     private function children(array $keys): ?self
     {
         if (count($keys) === 0 || count($keys) === 1 && $keys[0] === '') {
@@ -61,7 +59,10 @@ class RouteTree
             ?->children($keys);
     }
 
-    private function match(string|array $keys)
+    /**
+     * @param  string|list<string>  $keys
+     */
+    private function match(string|array $keys): self|null
     {
         // match a url part
         if (is_string($keys)) {
@@ -94,21 +95,35 @@ class RouteTree
         return $this->match(array_shift($keys))?->match($keys);
     }
 
-    private function methods(array $methods)
+    /**
+     * @param array<string, RouteAction> $methods
+     */
+    private function methods(array $methods): void
     {
         $this->methods = $methods;
     }
 
-    public function find(string $route)
+    public function find(string $route): ?self
     {
         return $this->match(explode('/', trim($route, '/')));
     }
 
-    public function method(?string $method = null)
+    /**
+     * @return ($method is null ? array<string, RouteAction> : ?RouteAction)
+     */
+    public function method(?string $method = null): array|RouteAction|null
     {
-        return $method === null ? $this->methods : $this->methods[$method] ?? null;
+        if ($method === null) {
+            return $this->methods;
+        }
+
+        return $this->methods[$method] ?? null;
     }
 
+    /**
+     * @param  array<string, mixed>|string|null  $param
+     * @return array<string, mixed>|mixed|null
+     */
     public function param(null|string|array $param = null)
     {
         if (is_array($param)) {

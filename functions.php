@@ -28,14 +28,20 @@ function dd(mixed ...$data): never
     exit();
 }
 
+/**
+ * @param  array<string, mixed>  $params
+ */
 function view(string $view, array $params = [], string $layout = 'app'): View
 {
     return View::make($view, $params, $layout);
 }
 
+/**
+ * @return Vector<mixed>
+ */
 function v(mixed ...$items): Vector
 {
-    return Vector::make($items);
+    return Vector::make(array_values($items));
 }
 
 function o(mixed ...$items): Obj
@@ -43,22 +49,28 @@ function o(mixed ...$items): Obj
     return Obj::make((object) $items);
 }
 
-function request(string|array|null $key = null)
+/**
+ * @param  array<int|string, mixed>|string|null  $key
+ */
+function request(string|array|null $key = null): mixed
 {
     return (new Arrays($_REQUEST))->access($key);
 }
 
-function session(string|array|null $key = null)
+/**
+ * @param  array<int|string, mixed>|string|null  $key
+ */
+function session(string|array|null $key = null): mixed
 {
     return (new Arrays($_SESSION))->access($key);
 }
 
-function e(?string $string)
+function e(?string $string): string
 {
     return htmlspecialchars($string ?? '');
 }
 
-function config(?string $key = null, mixed $default = null)
+function config(?string $key = null, mixed $default = null): mixed
 {
     $config = require path('config.php');
 
@@ -69,9 +81,15 @@ function config(?string $key = null, mixed $default = null)
     return $config;
 }
 
-function env(?string $key = null, mixed $default = null)
+function env(?string $key = null, mixed $default = null): mixed
 {
-    $raw = str_replace("\r\n", "\n", file_get_contents(path('.env')));
+    $contents = file_get_contents(path('.env'));
+
+    if ($contents === false) {
+        return $key === null ? [] : $default;
+    }
+
+    $raw = str_replace("\r\n", "\n", $contents);
 
     $env = [];
 
@@ -94,15 +112,17 @@ function env(?string $key = null, mixed $default = null)
     return $env;
 }
 
-function path(string $path = '', bool $internal = false)
+function path(string $path = '', bool $internal = false): string
 {
     $dir = __DIR__;
 
     while (! file_exists("$dir/vendor")) {
         $parent = dirname($dir);
+
         if ($parent === $dir) {
-            throw new \RuntimeException('Could not find project root ("vendor" dir not found).');
+            throw new RuntimeException('Could not find project root ("vendor" dir not found).');
         }
+
         $dir = $parent;
     }
 
@@ -113,19 +133,20 @@ function path(string $path = '', bool $internal = false)
     return "$dir/$path";
 }
 
-function perma(string|array $name, mixed $default = null)
+/**
+ * @param  array<string, mixed>|string  $name
+ */
+function perma(string|array $name, mixed $default = null): mixed
 {
     if (is_array($name)) {
         foreach ($name as $key => $value) {
             new PermamentVariable($key)->set($value);
         }
 
-        return;
+        return null;
     }
 
-    if (is_string($name)) {
-        return new PermamentVariable($name)->get($default);
-    }
+    return new PermamentVariable($name)->get($default);
 }
 
 function auth(): bool
@@ -133,11 +154,17 @@ function auth(): bool
     return Auth::auth();
 }
 
+/**
+ * @param  array<string, mixed>  $data
+ */
 function back(array $data = []): Redirect
 {
     return Redirect::back($data);
 }
 
+/**
+ * @param  array<string, string|int>  $params
+ */
 function route(string $name, array $params = []): string
 {
     return Route::findByName($name)
@@ -147,4 +174,12 @@ function route(string $name, array $params = []): string
 function validate(mixed $var, string $name = 'variable'): Validator
 {
     return new Validator($var, $name);
+}
+
+/**
+ * @param class-string<Exception> $class
+ */
+function error(string $class, mixed ...$args): never
+{
+    throw new $class(...$args);
 }
