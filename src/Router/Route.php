@@ -14,7 +14,7 @@ class Route
     private static array $routes = [];
 
     /**
-     * @param  null|array{string, string}  $action
+     * @param  null|array{class-string<\PXP\Http\Controllers\Controller>, string}  $action
      * @param  list<class-string<\PXP\Http\Middleware\Middleware>>  $middlewares
      */
     private function __construct(
@@ -54,6 +54,7 @@ class Route
 
     public function do(string $controller, string $method): self
     {
+        /** @var class-string<\PXP\Http\Controllers\Controller> $controller */
         $this->action = [$controller, $method];
 
         return $this;
@@ -68,11 +69,7 @@ class Route
     }
 
     /**
-     * @return array<string, array<string, array{
-     *     'class': class-string<\PXP\Http\Controllers\Controller>,
-     *     'method': string,
-     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>
-     * }>>
+     * @return array<string, array<string, RouteAction>>
      */
     public static function listForTree(): array
     {
@@ -87,14 +84,15 @@ class Route
                 continue;
             }
 
-            $routes[$route->route][$route->method] = [
-                'class' => $route->action[0],
-                'method' => $route->action[1],
-                'middlewares' => $route->middlewares,
-            ];
+            $action = new RouteAction;
+
+            $action->class = $route->action[0];
+            $action->method = $route->action[1];
+            $action->middlewares = $route->middlewares;
+
+            $routes[$route->route][$route->method] = $action;
         }
 
-        /** @var array<string, array<string, array{class: class-string<\PXP\Http\Controllers\Controller>, method: string, middlewares: list<class-string<\PXP\Http\Middleware\Middleware>>}>> */
         return $routes;
     }
 

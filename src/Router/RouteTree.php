@@ -11,9 +11,9 @@ class RouteTree
 
     /**
      * @param  array<string, RouteTree|null>  $children
-     * @param  array<mixed, mixed>  $methods  // TODO: fix types
+     * @param  array<string, RouteAction>  $methods
      */
-    private function __construct(private array $children, private array $methods) {}
+    private function __construct(private array $children, private array $methods = []) {}
 
     private static function empty(): self
     {
@@ -21,11 +21,7 @@ class RouteTree
     }
 
     /**
-     * @param array<string, array<string, array{
-     *     'class': class-string<\PXP\Http\Controllers\Controller>,
-     *     'method': string,
-     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>
-     * }>> $routes
+     * @param array<string, array<string, RouteAction>> $routes
      */
     public static function build(array $routes): self
     {
@@ -100,11 +96,7 @@ class RouteTree
     }
 
     /**
-     * @param array<string, array{
-     *     'class': class-string<\PXP\Http\Controllers\Controller>,
-     *     'method': string,
-     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>
-     * }> $methods
+     * @param array<string, RouteAction> $methods
      */
     private function methods(array $methods): void
     {
@@ -117,19 +109,15 @@ class RouteTree
     }
 
     /**
-     * @return ($method is null ? (array<string, array{
-     *     'class': class-string<\PXP\Http\Controllers\Controller>,
-     *     'method': string,
-     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>
-     * }>|null) : (array{
-     *     'class': class-string<\PXP\Http\Controllers\Controller>,
-     *     'method': string,
-     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>
-     * }|null))
+     * @return ($method is null ? array<string, RouteAction> : ?RouteAction)
      */
-    public function method(?string $method = null): ?array
+    public function method(?string $method = null): array|RouteAction|null
     {
-        return $method === null ? $this->methods : $this->methods[$method] ?? null;
+        if ($method === null) {
+            return $this->methods;
+        }
+
+        return $this->methods[$method] ?? null;
     }
 
     /**

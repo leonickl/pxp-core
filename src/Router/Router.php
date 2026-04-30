@@ -81,13 +81,8 @@ class Router
             return $route;
         }
 
-        $route = new RouteAction;
+        $action->params = $tree->param(); // associative array of route-params
 
-        $route->class = $action['class'];
-        $route->method = $action['method'];
-        $route->middlewares = $action['middlewares'];
-        $route->params = $tree->param(); // associative array of route-params
-
-        return $route;
+        return $action;
     }
 }
