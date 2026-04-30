@@ -156,3 +156,72 @@ Command::new('cache', function (?string $command) {
 
     exit("enter command, e.g. clear\n");
 });
+
+Command::new('make:model', function (?string $model, ?string $table) {
+    if ($model === null) {
+        exit("Please enter a model name\n");
+    }
+
+    if ($table === null) {
+        exit("Please enter the table name\n");
+    }
+
+    $file = <<<PHP
+    <?php
+
+    namespace App\Models;
+
+    use PXP\Data\Model;
+
+    class $model extends Model
+    {
+        protected \$table = '$table';
+    }
+    PHP;
+
+    if (! file_exists(path('src/Models'))) {
+        mkdir(path('src/Models'), true);
+    }
+
+    if (file_exists(path("src/Models/$model.php"))) {
+        exit("Model $model already exists\n");
+    }
+
+    file_put_contents(path("src/Models/$model.php"), $file);
+
+    exit("Created model $model\n");
+});
+
+Command::new('make:controller', function (?string $controller) {
+    if ($controller === null) {
+        exit("Please enter a model name\n");
+    }
+
+    $file = <<<PHP
+    <?php
+
+    namespace App\Controllers;
+
+    use PXP\Http\Controllers\Controller;
+
+    class $controller extends Controller
+    {
+        public function index()
+        {
+            return view('main');
+        }
+    }
+    PHP;
+
+    if (! file_exists(path('src/Controllers'))) {
+        mkdir(path('src/Controllers'), true);
+    }
+
+    if (file_exists(path("src/Controllers/$controller.php"))) {
+        exit("Controller $controller already exists\n");
+    }
+
+    file_put_contents(path("src/Controllers/$controller.php"), $file);
+
+    exit("Created controller $controller\n");
+});
