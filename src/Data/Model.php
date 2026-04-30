@@ -135,6 +135,21 @@ abstract class Model
         DB::init()->delete(self::table(), $this->id);
     }
 
+    /**
+     * @return Vector<static>
+     */
+    public static function trashed(): Vector
+    {
+        $list = DB::init()->trashedOnly(self::table());
+
+        return v(...$list)->map(fn (array $record) => (new static(exists: true))->fill(...$record));
+    }
+
+    public function restore(): void
+    {
+        DB::init()->restore(self::table(), $this->id);
+    }
+
     public function dd(): never
     {
         dd($this->record);
