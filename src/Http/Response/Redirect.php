@@ -3,7 +3,6 @@
 namespace PXP\Http\Response;
 
 use Exception;
-use PXP\Lib\History;
 
 class Redirect extends Response
 {
@@ -33,7 +32,7 @@ class Redirect extends Response
      */
     public static function back(array $data = []): Redirect
     {
-        return new Redirect((new History)->last(), $data);
+        return new Redirect($_SERVER['HTTP_REFERER'] ?? '/', $data);
     }
 
     public function output(): string

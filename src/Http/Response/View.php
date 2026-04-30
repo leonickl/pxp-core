@@ -4,6 +4,7 @@ namespace PXP\Http\Response;
 
 use LeoNickl\Plate\Plate;
 use PXP\Exceptions\ViewNotFoundException;
+use RuntimeException;
 
 class View extends Response
 {
@@ -80,7 +81,8 @@ class View extends Response
 
         include $path;
 
-        return ob_get_clean();
+        return ob_get_clean()
+            ?: error(RuntimeException::class, 'Failed to capture view output');
     }
 
     private function layout(string $view): View

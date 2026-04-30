@@ -8,6 +8,7 @@ use PXP\Http\Response\Response;
 use PXP\Http\Response\View;
 use PXP\Router\Router;
 use Throwable;
+use RuntimeException;
 
 class App
 {
@@ -26,7 +27,8 @@ class App
                 return $response;
             }
 
-            return json_encode($response);
+            return json_encode($response)
+                ?: error(RuntimeException::class, 'JSON encoding failed');
         } catch (UnauthorizedException) {
             return View::make('error.unauthorized')->render();
         } catch (ValidationException $e) {

@@ -13,7 +13,9 @@ class Router
     {
         $uri = '/'.trim($_SERVER['REQUEST_URI'], "/\r\n\t ");
 
-        return parse_url($uri, PHP_URL_PATH);
+        $parsed = parse_url($uri, PHP_URL_PATH);
+
+        return is_string($parsed) ? $parsed : '/';
     }
 
     /**
@@ -31,10 +33,10 @@ class Router
 
         // apply middlewares
         foreach ($content->middlewares as $middleware) {
-            $status = (new $middleware)->apply($content);
+            $result = (new $middleware)->apply();
 
-            if ($status !== true) {
-                return $status;
+            if ($result !== true) {
+                return $result;
             }
         }
 
@@ -45,39 +47,47 @@ class Router
     /**
      * returns the route action for the path-method combination
      */
-    private static function find(string $path, string $method): object
+    private static function find(string $path, string $method): RouteAction
     {
         $tree = RouteTree::build(Route::listForTree());
 
         // find current endpoint
         $endpoint = $tree->find($path);
 
-        if ($endpoint === null || count($endpoint->method()) === 0) {
-            return (object) [
-                'class' => ErrorController::class,
-                'method' => 'notFound',
-                'params' => ['route' => $path],
-                'middlewares' => [],
-                'history' => false,
-            ];
+        $methods = $endpoint?->method();
+
+        if ($endpoint === null || $methods === null || count($methods) === 0) {
+            $route = new RouteAction;
+
+            $route->class = ErrorController::class;
+            $route->method = 'notFound';
+            $route->params = ['route' => $path];
+            $route->middlewares = [];
+
+            return $route;
         }
 
         // find current method for found endpoint
         $action = $endpoint->method($method);
 
         if ($action === null) {
-            return (object) [
-                'class' => ErrorController::class,
-                'method' => 'methodNotSupported',
-                'params' => ['route' => $path, 'method' => $method],
-                'middlewares' => [],
-                'history' => false,
-            ];
+            $route = new RouteAction;
+
+            $route->class = ErrorController::class;
+            $route->method = 'methodNotSupported';
+            $route->params = ['route' => $path, 'method' => $method];
+            $route->middlewares = [];
+
+            return $route;
         }
 
-        $action['middlewares'] ??= [];
-        $action['params'] = $tree->param(); // associative array of route-params
+        $route = new RouteAction;
 
-        return (object) $action;
+        $route->class = $action['class'];
+        $route->method = $action['method'];
+        $route->middlewares = $action['middlewares'];
+        $route->params = $tree->param(); // associative array of route-params
+
+        return $route;
     }
 }

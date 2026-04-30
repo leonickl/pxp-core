@@ -12,7 +12,7 @@ class Arrays
     public function __construct(private array &$array) {}
 
     /**
-     * @param  string|array<string, mixed>|list<string>|null  $key
+     * @param  string|array<int|string, mixed>|list<string>|null  $key
      */
     public function access(string|array|null $key = null): mixed
     {
@@ -31,8 +31,8 @@ class Arrays
         }
 
         if (is_array($key)) {
-            foreach ($key as $key => $value) {
-                $this->set($key, $value);
+            foreach ($key as $k => $value) {
+                $this->set((string) $k, $value);
             }
 
             return $this;

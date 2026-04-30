@@ -14,7 +14,7 @@ class Route
     private static array $routes = [];
 
     /**
-     * @param  null|array{class-string, string}  $action
+     * @param  null|array{string, string}  $action
      * @param  list<class-string<\PXP\Http\Middleware\Middleware>>  $middlewares
      */
     private function __construct(
@@ -23,7 +23,6 @@ class Route
 
         private ?string $name = null,
         private ?array $action = null,
-        private ?bool $history = null,
 
         private array $middlewares = [],
     ) {}
@@ -60,15 +59,9 @@ class Route
         return $this;
     }
 
-    public function history(bool $history): self
-    {
-        $this->history = $history;
-
-        return $this;
-    }
-
     public function middleware(string $middleware): self
     {
+        /** @var class-string<\PXP\Http\Middleware\Middleware> $middleware */
         $this->middlewares[] = $middleware;
 
         return $this;
@@ -78,8 +71,7 @@ class Route
      * @return array<string, array<string, array{
      *     'class': class-string<\PXP\Http\Controllers\Controller>,
      *     'method': string,
-     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>,
-     *     'history': bool|null
+     *     'middlewares': list<class-string<\PXP\Http\Middleware\Middleware>>
      * }>>
      */
     public static function listForTree(): array
@@ -91,14 +83,18 @@ class Route
                 $routes[$route->route] = [];
             }
 
+            if ($route->action === null) {
+                continue;
+            }
+
             $routes[$route->route][$route->method] = [
                 'class' => $route->action[0],
                 'method' => $route->action[1],
                 'middlewares' => $route->middlewares,
-                'history' => $route->history,
             ];
         }
 
+        /** @var array<string, array<string, array{class: class-string<\PXP\Http\Controllers\Controller>, method: string, middlewares: list<class-string<\PXP\Http\Middleware\Middleware>>}>> */
         return $routes;
     }
 

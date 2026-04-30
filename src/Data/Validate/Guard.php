@@ -9,7 +9,7 @@ class Guard
 {
     public function __construct(private Closure $guard, private Closure $error) {}
 
-    public function check()
+    public function check(): void
     {
         if (! ($this->guard)()) {
             throw new ValidationException(($this->error)());

@@ -65,8 +65,12 @@ Command::new('db', function (mixed ...$args) {
     if (! $id) {
         $records = DB::init()->all($table);
 
+        if ($records === []) {
+            exit;
+        }
+
         // Determine column widths
-        $columns = array_keys($records[0] ?? []);
+        $columns = array_keys($records[0]);
         $colWidths = [];
 
         foreach ($columns as $col) {
@@ -98,6 +102,10 @@ Command::new('db', function (mixed ...$args) {
 
     $record = DB::init()->find($table, 'id', $id);
 
+    if ($record === []) {
+        exit;
+    }
+
     $maxColLen = max(array_map('strlen', array_keys($record)));
 
     foreach ($record as $column => $value) {
@@ -114,7 +122,7 @@ Command::new('delete', function (?string $table = null, int|string|null $id = nu
         exit("Please enter an id\n");
     }
 
-    DB::init()->delete($table, $id);
+    DB::init()->delete($table, (int) $id);
 
     echo "trashed $id of $table\n";
 });

@@ -2,6 +2,8 @@
 
 namespace PXP\Http\Response;
 
+use RuntimeException;
+
 class Json extends Response
 {
     private function __construct(private mixed $data, private int $flags) {}
@@ -13,6 +15,7 @@ class Json extends Response
 
     public function output(): string
     {
-        return json_encode($this->data, $this->flags);
+        return json_encode($this->data, $this->flags)
+            ?: error(RuntimeException::class, 'JSON encoding failed');
     }
 }
