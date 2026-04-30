@@ -5,8 +5,9 @@ namespace PXP\Http\Response;
 use LeoNickl\Plate\Plate;
 use PXP\Exceptions\ViewNotFoundException;
 use RuntimeException;
+use Stringable;
 
-class View extends Response
+class View extends Response implements Stringable
 {
     /**
      * @param  array<string, mixed>  $params
