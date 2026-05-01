@@ -9,6 +9,7 @@ use PXP\Http\Response\View;
 use PXP\Lib\Arrays;
 use PXP\Lib\Auth;
 use PXP\Router\Route;
+use PXP\Router\Router;
 
 function dump(mixed ...$data): void
 {
@@ -182,4 +183,9 @@ function validate(mixed $var, string $name = 'variable'): Validator
 function error(string $class, mixed ...$args): never
 {
     throw new $class(...$args);
+}
+
+function url(): string
+{
+    return Router::path();
 }
