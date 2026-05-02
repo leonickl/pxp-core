@@ -9,8 +9,10 @@ use PXP\Exceptions\ValidationException;
  * @method self string()
  * @method self int()
  * @method self float()
+ * @method self array()
  * @method self min(int $min = 1)
  * @method self max(int $max = 100)
+ * @method self in(mixed ...$list)
  */
 class Validator
 {

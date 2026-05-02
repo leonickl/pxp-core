@@ -164,7 +164,7 @@ function back(array $data = []): Redirect
 }
 
 /**
- * @param  array<string, string|int>  $params
+ * @param  string|int  $params
  */
 function route(string $name, mixed ...$params): string
 {

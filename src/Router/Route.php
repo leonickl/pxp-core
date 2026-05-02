@@ -113,7 +113,7 @@ class Route
     }
 
     /**
-     * @param  array<string, string|int>  $params
+     * @param  array<int|string, string|int>  $params
      */
     public function fillParams(array $params): string
     {
