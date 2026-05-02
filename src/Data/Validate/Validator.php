@@ -10,6 +10,7 @@ use PXP\Exceptions\ValidationException;
  * @method self int()
  * @method self float()
  * @method self array()
+ * @method self nullable()
  * @method self min(int $min = 1)
  * @method self max(int $max = 100)
  * @method self in(mixed ...$list)
