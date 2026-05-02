@@ -100,6 +100,6 @@ class View extends Response implements Stringable
 
     public function output(): string
     {
-        return $this->layout($this->layout);
+        return $this->layout($this->layout)->render();
     }
 }
