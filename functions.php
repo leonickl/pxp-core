@@ -166,7 +166,7 @@ function back(array $data = []): Redirect
 /**
  * @param  array<string, string|int>  $params
  */
-function route(string $name, array $params = []): string
+function route(string $name, mixed ...$params): string
 {
     return Route::findByName($name)
         ->fillParams($params);
