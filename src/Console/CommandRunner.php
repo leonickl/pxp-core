@@ -13,7 +13,7 @@ class CommandRunner
                 continue;
             }
 
-            mkdir($path);
+            mkdir($path, recursive: true);
         }
 
         if (! file_exists(path('.env'))) {

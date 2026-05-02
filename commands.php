@@ -180,7 +180,7 @@ Command::new('make:model', function (?string $model, ?string $table) {
     PHP;
 
     if (! file_exists(path('src/Models'))) {
-        mkdir(path('src/Models'), true);
+        mkdir(path('src/Models'), recursive: true);
     }
 
     if (file_exists(path("src/Models/$model.php"))) {
@@ -214,7 +214,7 @@ Command::new('make:controller', function (?string $controller) {
     PHP;
 
     if (! file_exists(path('src/Controllers'))) {
-        mkdir(path('src/Controllers'), true);
+        mkdir(path('src/Controllers'), recursive: true);
     }
 
     if (file_exists(path("src/Controllers/$controller.php"))) {
