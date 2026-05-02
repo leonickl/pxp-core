@@ -3,6 +3,8 @@
 namespace PXP\Router;
 
 use Exception;
+use PXP\Http\Controllers\Controller;
+use PXP\Http\Middleware\Middleware;
 
 class Route
 {
@@ -14,8 +16,8 @@ class Route
     private static array $routes = [];
 
     /**
-     * @param  null|array{class-string<\PXP\Http\Controllers\Controller>, string}  $action
-     * @param  list<class-string<\PXP\Http\Middleware\Middleware>>  $middlewares
+     * @param  null|array{class-string<Controller>, string}  $action
+     * @param  list<class-string<Middleware>>  $middlewares
      */
     private function __construct(
         private readonly string $route,
@@ -54,7 +56,7 @@ class Route
 
     public function do(string $controller, string $method): self
     {
-        /** @var class-string<\PXP\Http\Controllers\Controller> $controller */
+        /** @var class-string<Controller> $controller */
         $this->action = [$controller, $method];
 
         return $this;
@@ -62,7 +64,7 @@ class Route
 
     public function middleware(string $middleware): self
     {
-        /** @var class-string<\PXP\Http\Middleware\Middleware> $middleware */
+        /** @var class-string<Middleware> $middleware */
         $this->middlewares[] = $middleware;
 
         return $this;

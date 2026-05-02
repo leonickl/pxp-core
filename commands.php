@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use PXP\Console\Command;
 use PXP\Data\DB;
 
@@ -128,7 +129,7 @@ Command::new('delete', function (?string $table = null, int|string|null $id = nu
 });
 
 Command::new('create-user', function (?string $username, ?string $password) {
-    if (! class_exists(\App\Models\User::class)) {
+    if (! class_exists(User::class)) {
         exit("User model does not exist\n");
     }
 
@@ -140,7 +141,7 @@ Command::new('create-user', function (?string $username, ?string $password) {
         exit("Please enter a password\n");
     }
 
-    $user = \App\Models\User::create(
+    $user = User::create(
         username: $username,
         password_hash: password_hash($password, PASSWORD_DEFAULT),
     );
