@@ -12,7 +12,7 @@ use RuntimeException;
 
 class App
 {
-    public static function run(bool $auth = false): string
+    public static function run(): string
     {
         session_start();
 
