@@ -21,7 +21,7 @@ class RouteTree
     }
 
     /**
-     * @param array<string, array<string, RouteAction>> $routes
+     * @param  array<string, array<string, RouteAction>>  $routes
      */
     public static function build(array $routes): self
     {
@@ -62,7 +62,7 @@ class RouteTree
     /**
      * @param  string|list<string>  $keys
      */
-    private function match(string|array $keys): self|null
+    private function match(string|array $keys): ?self
     {
         // match a url part
         if (is_string($keys)) {
@@ -96,7 +96,7 @@ class RouteTree
     }
 
     /**
-     * @param array<string, RouteAction> $methods
+     * @param  array<string, RouteAction>  $methods
      */
     private function methods(array $methods): void
     {

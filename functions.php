@@ -178,7 +178,7 @@ function validate(mixed $var, string $name = 'variable'): Validator
 }
 
 /**
- * @param class-string<Exception> $class
+ * @param  class-string<Exception>  $class
  */
 function error(string $class, mixed ...$args): never
 {

@@ -7,8 +7,8 @@ use PXP\Exceptions\ValidationException;
 use PXP\Http\Response\Response;
 use PXP\Http\Response\View;
 use PXP\Router\Router;
-use Throwable;
 use RuntimeException;
+use Throwable;
 
 class App
 {
