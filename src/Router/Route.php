@@ -124,9 +124,9 @@ class Route
                 $param = substr($part, 1, -1);
                 $value = $params[$param];
                 $path .= "/$value";
+            } else {
+                $path .= "/$part";
             }
-
-            $path .= "/$part";
         }
 
         return $path;
