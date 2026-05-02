@@ -52,6 +52,10 @@ class View extends Response implements Stringable
     private function find(): string
     {
         // user-defined views
+        if (file_exists($user = path("views/$this->view.plate"))) {
+            return $this->plateToPHP($user);
+        }
+
         if (file_exists($user = path("views/$this->view.plate.php"))) {
             return $this->plateToPHP($user);
         }
@@ -61,6 +65,10 @@ class View extends Response implements Stringable
         }
 
         // framework-internal views
+        if (file_exists($internal = path("views/$this->view.plate", internal: true))) {
+            return $this->plateToPHP($internal);
+        }
+
         if (file_exists($internal = path("views/$this->view.plate.php", internal: true))) {
             return $this->plateToPHP($internal);
         }
