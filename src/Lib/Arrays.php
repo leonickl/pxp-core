@@ -2,6 +2,7 @@
 
 namespace PXP\Lib;
 
+use PXP\Ds\Obj;
 use RuntimeException;
 
 class Arrays
@@ -112,5 +113,35 @@ class Arrays
         }
 
         return $data;
+    }
+
+    /**
+     * @param  array<string, string>  $rules
+     */
+    public function validate(array $list): Obj
+    {
+        $validated = o();
+        $errors = v();
+
+        foreach ($list as $var => $rules) {
+            $validator = validate($this->get($var), $var);
+
+            foreach (explode('|', $rules) as $rule) {
+                $call = explode(':', $rule);
+                $method = $call[0];
+                $params = array_slice($call, 1);
+
+                $validator = $validator->$method(...$params);
+            }
+
+            $validated->$var = $this->get($var);
+            $errors = $errors->with(...$validator->get());
+        }
+
+        foreach ($errors as $error) {
+            throw $error;
+        }
+
+        return $validated;
     }
 }
