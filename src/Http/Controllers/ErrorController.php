@@ -8,11 +8,17 @@ class ErrorController extends Controller
 {
     public function notFound(string $route): Response
     {
-        return view('error.not-found', compact('route'));
+        return view('error', [
+            'title' => 'Not Found',
+            'message' => "$route not found.",
+        ]);
     }
 
     public function methodNotSupported(string $route, string $method): Response
     {
-        return view('error.method-not-supported', compact('route', 'method'));
+        return view('error', [
+            'title' => 'Method not supported',
+            'message' => "Method $method is not supported on $route.",
+        ]);
     }
 }
