@@ -176,4 +176,9 @@ class Validator
             }
         }
     }
+
+    public function var(): mixed
+    {
+        return [$this->name => $this->var];
+    }
 }
