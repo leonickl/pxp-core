@@ -2,9 +2,9 @@
 
 namespace PXP\Lib;
 
+use PXP\Data\Validate\ValidationProxy;
 use PXP\Ds\Obj;
 use RuntimeException;
-use PXP\Data\Validate\ValidationProxy;
 
 class Arrays
 {
@@ -121,7 +121,7 @@ class Arrays
         $errors = [];
         $validated = [];
 
-        foreach($rules(new ValidationProxy($this)) as $validator) {
+        foreach ($rules(new ValidationProxy($this)) as $validator) {
             $validated = [...$validated, ...$validator->var()];
             $errors = [...$errors, ...$validator->get()];
         }
