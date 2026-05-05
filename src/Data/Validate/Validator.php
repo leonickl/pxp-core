@@ -14,6 +14,7 @@ use PXP\Exceptions\ValidationException;
  * @method self min(int $min = 1)
  * @method self max(int $max = 100)
  * @method self in(mixed ...$list)
+ * @method self email()
  */
 class Validator
 {
@@ -106,6 +107,19 @@ class Validator
             }
 
             throw new Exception("'in' not valid for type '$this->type'");
+        }
+
+        if ($method === 'email') {
+            if ($this->type === 'string') {
+                $this->guards[] = new Guard(
+                    fn () => filter_var($this->var, FILTER_VALIDATE_EMAIL),
+                    fn () => "$this->name must be one of ".implode(', ', $args),
+                );
+
+                return $this;
+            }
+
+            throw new Exception("'email' not valid for type '$this->type'");
         }
 
         throw new Exception("unknown validation rule $method");
