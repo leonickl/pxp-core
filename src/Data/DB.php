@@ -232,7 +232,6 @@ class DB
 
     /**
      * @param  array<string|int, mixed>  $data
-     * @return Vector<array<string, mixed>>
      */
     public function sql(string $sql, array $data = []): void
     {
