@@ -2,10 +2,10 @@
 
 namespace PXP\Exceptions;
 
-class UnauthorizedException extends \Exception
+class UnauthorizedException extends DisplayException
 {
-    public function __construct()
+    public function __construct(string $message = '')
     {
-        parent::__construct('Unauthorized');
+        parent::__construct('Unauthorized', $message);
     }
 }

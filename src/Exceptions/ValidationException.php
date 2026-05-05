@@ -2,12 +2,10 @@
 
 namespace PXP\Exceptions;
 
-use Exception;
-
-class ValidationException extends Exception
+class ValidationException extends DisplayException
 {
     public function __construct(string $message)
     {
-        parent::__construct($message);
+        parent::__construct('Validation Exception', $message);
     }
 }

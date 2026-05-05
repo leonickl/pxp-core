@@ -2,10 +2,8 @@
 
 namespace PXP\Lib;
 
-use PXP\Exceptions\UnauthorizedException;
-use PXP\Exceptions\ValidationException;
+use PXP\Exceptions\DisplayException;
 use PXP\Http\Response\Response;
-use PXP\Http\Response\View;
 use PXP\Router\Router;
 use RuntimeException;
 use Throwable;
@@ -29,16 +27,21 @@ class App
 
             return json_encode($response)
                 ?: error(RuntimeException::class, 'JSON encoding failed');
-        } catch (UnauthorizedException) {
-            return View::make('error.unauthorized')->render();
-        } catch (ValidationException $e) {
-            return View::make('error.validation', ['error' => $e->getMessage()])
-                ->render();
+        } catch (DisplayException $e) {
+            return view('error', [
+                'title' => $e->getTitle(),
+                'message' => $e->getMessage(),
+            ])->render();
         } catch (Throwable $e) {
-            Log::log('Error ('.$e::class.'): '
+            $uid = uniqid();
+
+            Log::log('Error '.$uid.' ('.$e::class.'): '
                 .$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
 
-            return View::make('error')->render();
+            return view('error', [
+                'title' => 'Error',
+                'error' => "An unknown error occured. Contact the admin. (Code $uid)",
+            ])->render();
         }
     }
 }

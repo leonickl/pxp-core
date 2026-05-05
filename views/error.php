@@ -1,3 +1,2 @@
-<h1>Error</h1>
-
-<h2>Ein Fehler ist aufgetreten.</h2>
+<h1>{{ $title }}</h1>
+<h2>{{ $message }}</h2>
