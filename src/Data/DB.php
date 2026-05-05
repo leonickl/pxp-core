@@ -229,4 +229,14 @@ class DB
 
         return v(...$stmt->fetchAll(PDO::FETCH_ASSOC));
     }
+
+    /**
+     * @param  array<string|int, mixed>  $data
+     * @return Vector<array<string, mixed>>
+     */
+    public function sql(string $sql, array $data = []): void
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+    }
 }
