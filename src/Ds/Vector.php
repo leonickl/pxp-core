@@ -157,7 +157,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
 
     public function last(): mixed
     {
-        return $this->items[count($this->items) - 1] ?? null;
+        return array_last($this->items) ?? null;
     }
 
     public function dd(mixed ...$append): void
