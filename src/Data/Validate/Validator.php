@@ -113,7 +113,7 @@ class Validator
             if ($this->type === 'string') {
                 $this->guards[] = new Guard(
                     fn () => filter_var($this->var, FILTER_VALIDATE_EMAIL),
-                    fn () => "$this->name must be one of ".implode(', ', $args),
+                    fn () => "$this->name must be an email address",
                 );
 
                 return $this;
