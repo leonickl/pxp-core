@@ -79,14 +79,14 @@ class DB
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, mixed>|null
      */
-    public function find(string $table, string $column, mixed $value): array
+    public function find(string $table, string $column, mixed $value): ?array
     {
         $stmt = $this->pdo->prepare("select * from $table where $column = ? and deleted_at is null;");
         $stmt->execute([$value]);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     /**
@@ -126,7 +126,8 @@ class DB
 
         $id = $record['id'] ?? $this->pdo->lastInsertId();
 
-        return $this->find($table, 'id', $id);
+        return $this->find($table, 'id', $id)
+            ?: error(Exception::class, 'Record not found after insert');
     }
 
     /**
@@ -158,7 +159,8 @@ class DB
         $status = $this->pdo->prepare($sql)->execute($values)
             ?: error(Exception::class, 'creating record failed');
 
-        return $this->find($table, 'id', $id);
+        return $this->find($table, 'id', $id)
+            ?: error(Exception::class, 'Record not found after update');
     }
 
     /**

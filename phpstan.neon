@@ -4,3 +4,5 @@ parameters:
         - src
         - functions.php
         - commands.php
+    bootstrapFiles:
+        - stubs/User.stub.php

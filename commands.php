@@ -103,7 +103,7 @@ Command::new('db', function (mixed ...$args) {
 
     $record = DB::init()->find($table, 'id', $id);
 
-    if ($record === []) {
+    if (! $record) {
         exit;
     }
 
