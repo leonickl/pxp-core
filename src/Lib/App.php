@@ -31,7 +31,7 @@ class App
             return view('error', [
                 'title' => $e->getTitle(),
                 'message' => $e->getMessage(),
-            ])->render();
+            ])->output();
         } catch (Throwable $e) {
             $uid = uniqid();
 
@@ -41,7 +41,7 @@ class App
             return view('error', [
                 'title' => 'Error',
                 'error' => "An unknown error occured. Contact the admin. (Code $uid)",
-            ])->render();
+            ])->output();
         }
     }
 }

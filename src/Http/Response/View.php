@@ -80,7 +80,7 @@ class View extends Response implements Stringable
         throw new ViewNotFoundException($this->view);
     }
 
-    public function render(): string
+    private function render(): string
     {
         $path = $this->find();
 
