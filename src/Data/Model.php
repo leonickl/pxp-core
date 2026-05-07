@@ -37,6 +37,13 @@ abstract class Model
         return $this;
     }
 
+    private function fillDefaults(): static
+    {
+        $this->fill(...$this->defaults());
+
+        return $this;
+    }
+
     private static function table(): string
     {
         $object = new static;
@@ -107,9 +114,19 @@ abstract class Model
             ->map(fn (array $record) => new static(exists: true)->fill(...$record));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    protected function defaults(): array
+    {
+        return [];
+    }
+
     public static function new(mixed ...$props): static
     {
-        return (new static)->fill(...$props);
+        return (new static)
+            ->fillDefaults()
+            ->fill(...$props);
     }
 
     public static function create(mixed ...$props): static
