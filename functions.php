@@ -201,5 +201,5 @@ function uuid(): string
 
 function plug_plate(string $view_file, mixed ...$params): string
 {
-    return view($view_file, $params, layout: null);
+    return view($view_file, $params, layout: null)->output();
 }
