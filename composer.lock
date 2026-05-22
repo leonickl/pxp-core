@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d036398784147dce4f2bcc016a51152",
+    "content-hash": "ac29eb9f7affafcf4149d08b330ff991",
     "packages": [
         {
             "name": "leonickl/plate",
-            "version": "v1.0.1",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/leonickl/plate.git",
-                "reference": "65371b0eb86d84208eb681be9ffa9a12385039d2"
+                "reference": "9b9b509750cbca47f5b8997d35f5a2427448e2f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leonickl/plate/zipball/65371b0eb86d84208eb681be9ffa9a12385039d2",
-                "reference": "65371b0eb86d84208eb681be9ffa9a12385039d2",
+                "url": "https://api.github.com/repos/leonickl/plate/zipball/9b9b509750cbca47f5b8997d35f5a2427448e2f4",
+                "reference": "9b9b509750cbca47f5b8997d35f5a2427448e2f4",
                 "shasum": ""
             },
             "require": {
@@ -39,9 +39,9 @@
             "description": "A PHP templating engine",
             "support": {
                 "issues": "https://github.com/leonickl/plate/issues",
-                "source": "https://github.com/leonickl/plate/tree/v1.0.1"
+                "source": "https://github.com/leonickl/plate/tree/v2.0.0"
             },
-            "time": "2026-04-21T16:24:01+00:00"
+            "time": "2026-05-22T14:18:28+00:00"
         }
     ],
     "packages-dev": [
@@ -115,11 +115,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.54",
+            "version": "2.1.55",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8be50c3992107dc837b17da4d140fbbdf9a5c5bd",
-                "reference": "8be50c3992107dc837b17da4d140fbbdf9a5c5bd",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9eaac3826ed5e9b8427350a43cac825eeca3f566",
+                "reference": "9eaac3826ed5e9b8427350a43cac825eeca3f566",
                 "shasum": ""
             },
             "require": {
@@ -164,7 +164,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-29T13:31:09+00:00"
+            "time": "2026-05-18T11:57:34+00:00"
         }
     ],
     "aliases": [],
