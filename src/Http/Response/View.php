@@ -96,11 +96,13 @@ class View extends Response implements Stringable
 
     private function layout(?string $view): View
     {
-        return $view === null
-            ? $this->render()
-            : View::make($view, [
-                'slot' => $this->render(),
-            ]);
+        if ($view === null) {
+            return $this;
+        }
+
+        return View::make($view, [
+            'slot' => $this->render(),
+        ]);
     }
 
     public function __toString()
