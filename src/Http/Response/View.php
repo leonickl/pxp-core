@@ -15,7 +15,7 @@ class View extends Response implements Stringable
     private function __construct(
         private string $view,
         private array $params,
-        private string $layout,
+        private ?string $layout,
     ) {}
 
     /**
@@ -24,7 +24,7 @@ class View extends Response implements Stringable
     public static function make(
         string $view,
         array $params = [],
-        string $layout = 'app',
+        ?string $layout = 'app',
     ): View {
         return new View($view, $params, $layout);
     }
@@ -94,11 +94,13 @@ class View extends Response implements Stringable
             ?: error(RuntimeException::class, 'Failed to capture view output');
     }
 
-    private function layout(string $view): View
+    private function layout(?string $view): View
     {
-        return View::make($view, [
-            'slot' => $this->render(),
-        ]);
+        return $view === null
+            ? $this->render()
+            : View::make($view, [
+                'slot' => $this->render(),
+            ]);
     }
 
     public function __toString()

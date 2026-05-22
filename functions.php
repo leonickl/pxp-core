@@ -32,7 +32,7 @@ function dd(mixed ...$data): never
 /**
  * @param  array<string, mixed>  $params
  */
-function view(string $view, array $params = [], string $layout = 'app'): View
+function view(string $view, array $params = [], ?string $layout = 'app'): View
 {
     return View::make($view, $params, $layout);
 }
@@ -197,4 +197,9 @@ function uuid(): string
     $data[8] = chr(ord($data[8]) & 0x3F | 0x80);
 
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+}
+
+function plug_plate(string $title, mixed ...$params): string
+{
+    return view($title, $params, layout: null);
 }
