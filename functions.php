@@ -199,7 +199,7 @@ function uuid(): string
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
 }
 
-function plug_plate(string $title, mixed ...$params): string
+function plug_plate(string $view_file, mixed ...$params): string
 {
-    return view($title, $params, layout: null);
+    return view($view_file, $params, layout: null);
 }
