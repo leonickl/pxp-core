@@ -2,6 +2,7 @@
 
 namespace PXP\Data;
 
+use PXP\Data\Query\Select;
 use PXP\Ds\Vector;
 use PXP\Exceptions\ModelNotFoundException;
 use RuntimeException;
@@ -44,16 +45,23 @@ abstract class Model
         return $this;
     }
 
-    private static function table(): string
+    public static function table(): string
     {
         $object = new static;
 
         if (! isset($object->table)) {
-            $class = static::class;
-            throw new RuntimeException("please set table property for $class");
+            throw new RuntimeException('please set table property for '.static::class);
         }
 
         return $object->table;
+    }
+
+    /**
+     * @return Vector<static>
+     */
+    public static function select(string ...$columns): Select
+    {
+        return new Select($columns)->from(static::class);
     }
 
     /**
