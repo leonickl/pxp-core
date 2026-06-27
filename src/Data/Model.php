@@ -56,12 +56,9 @@ abstract class Model
         return $object->table;
     }
 
-    /**
-     * @return Vector<static>
-     */
     public static function select(string ...$columns): Select
     {
-        return new Select($columns)->from(static::class);
+        return new Select(columns: array_values($columns), class: static::class);
     }
 
     /**
