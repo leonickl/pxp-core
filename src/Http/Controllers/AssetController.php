@@ -34,16 +34,10 @@ class AssetController
 
     private function find(string $file): string
     {
-        $user = path("assets/css/$file.css");
-
-        if (file_exists($user)) {
-            return $user;
-        }
-
-        $internal = path("assets/css/$file.css", internal: true);
-
-        if (file_exists($internal)) {
-            return $internal;
+        foreach(modules() as $module => $_) {
+            if (file_exists($path = path("assets/css/$file.css", module: $module))) {
+                return $path;
+            }
         }
 
         throw new Exception("CSS file '$file' does not exist");

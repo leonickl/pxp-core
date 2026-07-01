@@ -14,6 +14,8 @@
 
     --primary: #3b82f6;
     --primary-hover: #2563eb;
+    --secondary: #6366f1;
+    --secondary-hover: #4f46e5;
     --warn: #ff5e5eff;
     --warn-hover: #ff0000ff;
 
@@ -24,6 +26,14 @@
     --notification-color: var(--color);
     --notification-background: #b1ecff;
     --notification-border: blue;
+
+    --notification-warn-color: #7a1a0a;
+    --notification-warn-background: #fff0ee;
+    --notification-warn-border: #ff5e5e;
+
+    --notification-success-color: #14532d;
+    --notification-success-background: #e6f9f0;
+    --notification-success-border: #22c55e;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -43,6 +53,8 @@
 
         --primary: #2563eb;
         --primary-hover: #1d4ed8;
+        --secondary: #4f46e5;
+        --secondary-hover: #4338ca;
         --warn: #b91c1c;
         --warn-hover: #ff0000ff;
 
@@ -53,5 +65,13 @@
         --notification-color: #e0f2fe;
         --notification-background: #2563eb;
         --notification-border: #3b82f6;
+
+        --notification-warn-color: #fca5a5;
+        --notification-warn-background: #4a1515;
+        --notification-warn-border: #b91c1c;
+
+        --notification-success-color: #86efac;
+        --notification-success-background: #052e16;
+        --notification-success-border: #16a34a;
     }
 }

@@ -7,9 +7,9 @@ use PXP\Ds\Vector;
 use PXP\Http\Response\Redirect;
 use PXP\Http\Response\View;
 use PXP\Lib\Arrays;
-use PXP\Lib\Auth;
 use PXP\Router\Route;
 use PXP\Router\Router;
+use PXP\Lib\Notification;
 
 function dump(mixed ...$data): void
 {
@@ -71,9 +71,9 @@ function e(?string $string): string
     return htmlspecialchars($string ?? '');
 }
 
-function config(?string $key = null, mixed $default = null): mixed
+function config(?string $key = null, mixed $default = null, ?string $module = null): mixed
 {
-    $config = require path('config.php');
+    $config = require path('config.php', module: $module);
 
     if ($key) {
         return $config[$key] ?? $default;
@@ -113,22 +113,20 @@ function env(?string $key = null, mixed $default = null): mixed
     return $env;
 }
 
-function path(string $path = '', bool $internal = false): string
+function path(string $path = '', ?string $module = null): string
 {
-    $dir = __DIR__;
+    // if (! session()->has('pwd')) {
+    //     session(['pwd' => realpath(dirname($_SERVER['SCRIPT_FILENAME']))]);
+    // }
 
-    while (! file_exists("$dir/vendor")) {
-        $parent = dirname($dir);
+    $dir = realpath(dirname($_SERVER['SCRIPT_FILENAME']));
 
-        if ($parent === $dir) {
-            throw new RuntimeException('Could not find project root ("vendor" dir not found).');
-        }
-
-        $dir = $parent;
+    if (! file_exists("$dir/vendor")) {
+        throw new RuntimeException("Directory 'vendor' not found in project root ($dir)");
     }
 
-    if ($internal) {
-        $dir .= '/vendor/leonickl/pxp-core';
+    if (module($module) !== null) {
+        $dir .= '/vendor/'.module($module);
     }
 
     return "$dir/$path";
@@ -148,11 +146,6 @@ function perma(string|array $name, mixed $default = null): mixed
     }
 
     return new PermamentVariable($name)->get($default);
-}
-
-function auth(): bool
-{
-    return Auth::auth();
 }
 
 /**
@@ -202,4 +195,31 @@ function uuid(): string
 function plug_plate(string $view_file, mixed ...$params): string
 {
     return view($view_file, $params, layout: null)->output();
+}
+
+/**
+ * @return list<Notification>
+ */
+function notifications(): array
+{
+    return Notification::all();
+}
+
+function modules(): array|string
+{
+    return [
+        '' => null,
+        'pxp' => 'leonickl/pxp-core',
+        ...config('modules', []),
+    ];
+}
+
+function module(?string $module): ?string
+{
+    if($module === null || $module === '') {
+        return null;
+    }
+
+    return modules()[$module]
+        ?: error(RuntimeException::class, "module '$module' not found");
 }

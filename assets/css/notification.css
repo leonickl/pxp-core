@@ -1,7 +1,4 @@
 .notification {
-    color: var(--notification-color);
-    background: var(--notification-background);
-    border: 1px solid var(--notification-border);
     padding: 8px;
     border-radius: 5px;
     display: flex;
@@ -9,4 +6,22 @@
     justify-content: space-between;
     align-content: center;
     margin-bottom: 1rem;
+}
+
+.notification.info {
+    color: var(--notification-color);
+    background: var(--notification-background);
+    border: 1px solid var(--notification-border);
+}
+
+.notification.success {
+    color: var(--notification-success-color);
+    background: var(--notification-success-background);
+    border: 1px solid var(--notification-success-border);
+}
+
+.notification.warn {
+    color: var(--notification-warn-color);
+    background: var(--notification-warn-background);
+    border: 1px solid var(--notification-warn-border);
 }

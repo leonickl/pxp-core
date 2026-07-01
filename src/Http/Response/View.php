@@ -51,30 +51,14 @@ class View extends Response implements Stringable
      */
     private function find(): string
     {
-        // user-defined views
-        if (file_exists($user = path("views/$this->view.plate"))) {
-            return $this->plateToPHP($user);
-        }
+        foreach(modules() as $module => $_) {
+            if (file_exists($path = path("views/$this->view.plate", module: $module))) {
+                return $this->plateToPHP($path);
+            }
 
-        if (file_exists($user = path("views/$this->view.plate.php"))) {
-            return $this->plateToPHP($user);
-        }
-
-        if (file_exists($user = path("views/$this->view.php"))) {
-            return $user;
-        }
-
-        // framework-internal views
-        if (file_exists($internal = path("views/$this->view.plate", internal: true))) {
-            return $this->plateToPHP($internal);
-        }
-
-        if (file_exists($internal = path("views/$this->view.plate.php", internal: true))) {
-            return $this->plateToPHP($internal);
-        }
-
-        if (file_exists($internal = path("views/$this->view.php", internal: true))) {
-            return $internal;
+            if (file_exists($path = path("views/$this->view.php", module: $module))) {
+                return $path;
+            }
         }
 
         throw new ViewNotFoundException($this->view);

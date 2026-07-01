@@ -128,27 +128,6 @@ Command::new('delete', function (?string $table = null, int|string|null $id = nu
     echo "trashed $id of $table\n";
 });
 
-Command::new('create-user', function (?string $username, ?string $password) {
-    if (! class_exists(User::class)) {
-        exit("User model does not exist\n");
-    }
-
-    if ($username === null) {
-        exit("Please enter a username\n");
-    }
-
-    if ($password === null) {
-        exit("Please enter a password\n");
-    }
-
-    $user = User::create(
-        username: $username,
-        password_hash: password_hash($password, PASSWORD_DEFAULT),
-    );
-
-    echo "created user with id $user->id\n";
-});
-
 Command::new('cache', function (?string $command) {
     if ($command === 'clear') {
         rmdir(path('cache'));

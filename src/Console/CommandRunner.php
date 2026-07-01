@@ -4,6 +4,11 @@ namespace PXP\Console;
 
 class CommandRunner
 {
+    public function __construct()
+    {
+        session_start();
+    }
+
     public function initDirs(): void
     {
         foreach (['database', 'log', 'cache'] as $dir) {
@@ -23,14 +28,10 @@ class CommandRunner
 
     public function execute(?string $command = null, string ...$args): void
     {
-        // internal commands
-        require path('commands.php', internal: true);
-
-        // user commands
-        $file = path('commands.php');
-
-        if (file_exists($file)) {
-            require $file;
+        foreach(modules() as $module => $_) {
+            if (file_exists($path = path("commands.php", module: $module))) {
+                require $path;
+            }
         }
 
         if ($command === null) {
