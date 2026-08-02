@@ -7,9 +7,11 @@ use PXP\Ds\Vector;
 use PXP\Http\Response\Redirect;
 use PXP\Http\Response\View;
 use PXP\Lib\Arrays;
+use PXP\Lib\Notification;
+use PXP\Lib\Resolver;
+use PXP\Lib\Unstatifier;
 use PXP\Router\Route;
 use PXP\Router\Router;
-use PXP\Lib\Notification;
 
 function dump(mixed ...$data): void
 {
@@ -71,15 +73,25 @@ function e(?string $string): string
     return htmlspecialchars($string ?? '');
 }
 
-function config(?string $key = null, mixed $default = null, ?string $module = null): mixed
+function config(?string $key = null, mixed $default = null, ?string $module = null, ?array $config = null): mixed
 {
-    $config = require path('config.php', module: $module);
+    $config ??= require path('config.php', module: $module);
 
-    if ($key) {
+    if (! $key) {
+        return $config;
+    }
+
+    if (! str_contains($key, '.')) {
         return $config[$key] ?? $default;
     }
 
-    return $config;
+    [$nest, $rest] = explode('.', $key, 2);
+
+    if (! array_key_exists($nest, $config) || ! is_array($config[$nest])) {
+        return $default;
+    }
+
+    return config(key: $rest, default: $default, module: $module, config: $config[$nest]);
 }
 
 function env(?string $key = null, mixed $default = null): mixed
@@ -194,6 +206,10 @@ function uuid(): string
 
 function plug_plate(string $view_file, mixed ...$params): string
 {
+    if (! array_all($params, fn ($v, $k) => is_string($k))) {
+        throw new RuntimeException("Invalid parameter name '$k'");
+    }
+
     return view($view_file, $params, layout: null)->output();
 }
 
@@ -205,7 +221,10 @@ function notifications(): array
     return Notification::all();
 }
 
-function modules(): array|string
+/**
+ * @return array<string, string|null>
+ */
+function modules(): array
 {
     return [
         '' => null,
@@ -216,10 +235,45 @@ function modules(): array|string
 
 function module(?string $module): ?string
 {
-    if($module === null || $module === '') {
+    if ($module === null || $module === '') {
         return null;
     }
 
     return modules()[$module]
         ?: error(RuntimeException::class, "module '$module' not found");
+}
+
+/**
+ * @template T of object
+ *
+ * @param  class-string<T>  $abstract
+ * @return class-string<T>
+ */
+function resolve(string $abstract): string
+{
+    return new Resolver(config('resolver', []))
+        ->resolve($abstract);
+}
+
+/**
+ * @template T of object
+ *
+ * @param  class-string<T>  $abstract
+ * @return T
+ */
+function make(string $abstract, mixed ...$args): mixed
+{
+    return new Resolver(config('resolver', []))
+        ->make($abstract, $args);
+}
+
+/**
+ * @template T of object
+ *
+ * @param  class-string<T>  $class
+ * @return Unstatifier<T>
+ */
+function unstatic(string $class): Unstatifier
+{
+    return new Unstatifier($class);
 }

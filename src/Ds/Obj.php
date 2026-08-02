@@ -16,7 +16,7 @@ use Traversable;
  * @implements ArrayAccess<string|int, mixed>
  * @implements IteratorAggregate<string|int, mixed>
  */
-class Obj implements ArrayAccess, Countable, IteratorAggregate
+class Obj extends stdClass implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * @param  array<string|int, mixed>  $items

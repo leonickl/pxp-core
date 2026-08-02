@@ -1,15 +1,15 @@
 <?php
 
-use App\Models\User;
 use PXP\Console\Command;
 use PXP\Data\DB;
+use PXP\Data\Migrations\Migrator;
 
 Command::new('server', function () {
     shell_exec('/usr/bin/env php -S localhost:'.config('port', 8085).' '.path('index.php'));
 });
 
 Command::new('migrate', function () {
-    require path('/migrate.php');
+    (new Migrator)->migrate();
 });
 
 Command::new('play', function () {
@@ -170,6 +170,41 @@ Command::new('make:model', function (?string $model, ?string $table) {
     file_put_contents(path("src/Models/$model.php"), $file);
 
     exit("Created model $model\n");
+});
+
+Command::new('make:migration', function (?string $name = null) {
+    if ($name === null) {
+        exit("Please enter a migration name\n");
+    }
+
+    $stamp = date('Y-m-d-His');
+    $dir = path('database/migrations');
+
+    if (! file_exists($dir)) {
+        mkdir($dir, recursive: true);
+    }
+
+    $file = <<<PHP
+    <?php
+
+    use PXP\Data\DB;
+    use PXP\Data\Migrations\Migration;
+
+    return Migration::new('$stamp')
+        ->up(fn (DB \$db) => \$db->sql(''))
+        ->down(fn (DB \$db) => \$db->sql(''));
+
+    PHP;
+
+    $filename = "$stamp"."_$name.php";
+
+    if (file_exists("$dir/$filename")) {
+        exit("Migration $filename already exists\n");
+    }
+
+    file_put_contents("$dir/$filename", $file);
+
+    exit("Created migration $filename\n");
 });
 
 Command::new('make:controller', function (?string $controller) {

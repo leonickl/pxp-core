@@ -51,7 +51,7 @@ class View extends Response implements Stringable
      */
     private function find(): string
     {
-        foreach(modules() as $module => $_) {
+        foreach (modules() as $module => $_) {
             if (file_exists($path = path("views/$this->view.plate", module: $module))) {
                 return $this->plateToPHP($path);
             }

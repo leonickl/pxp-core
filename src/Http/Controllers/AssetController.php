@@ -34,7 +34,7 @@ class AssetController
 
     private function find(string $file): string
     {
-        foreach(modules() as $module => $_) {
+        foreach (modules() as $module => $_) {
             if (file_exists($path = path("assets/css/$file.css", module: $module))) {
                 return $path;
             }

@@ -28,8 +28,8 @@ class CommandRunner
 
     public function execute(?string $command = null, string ...$args): void
     {
-        foreach(modules() as $module => $_) {
-            if (file_exists($path = path("commands.php", module: $module))) {
+        foreach (modules() as $module => $_) {
+            if (file_exists($path = path('commands.php', module: $module))) {
                 require $path;
             }
         }
