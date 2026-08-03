@@ -62,6 +62,10 @@
     padding-block: 0.5rem;
 }
 
+.pb-2 {
+    padding-bottom: 2rem;
+}
+
 .mb {
     margin-bottom: 1rem;
 }
@@ -100,6 +104,10 @@
 
 .w-min-40 {
     min-width: 40rem;
+}
+
+.w-max-60 {
+    max-width: 40rem;
 }
 
 /**
