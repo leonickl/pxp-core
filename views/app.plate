@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {{ each: config('css') as $file }}
+    {{ each: config('css', []) as $file }}
         <link rel="stylesheet" href="{{ route('css', file: $file) }}">
     {{ each; }}
 
