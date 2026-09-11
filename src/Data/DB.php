@@ -121,13 +121,57 @@ class DB
 
         $sql = "insert into `$table` ($columns) values ($placeholders);";
 
-        $status = $this->pdo->prepare($sql)->execute($record)
+        $this->pdo->prepare($sql)->execute($record)
             ?: error(Exception::class, 'creating record failed');
 
         $id = $record['id'] ?? $this->pdo->lastInsertId();
 
         return $this->find($table, 'id', $id)
             ?: error(Exception::class, 'Record not found after insert');
+    }
+
+    /**
+     * @param  list<array<string, mixed>>  $records
+     */
+    public function insertMany(string $table, array $records, bool $ignoreDuplicates = false): void
+    {
+        if (count($records) === 0) {
+            return;
+        }
+
+        $now = date('Y-m-d H:i:s');
+
+        foreach ($records as $key => $record) {
+            $records[$key]['created_at'] = $now;
+            $records[$key]['modified_at'] = $now;
+        }
+
+        $columns = o(...$records[0])
+            ->keys()
+            ->map(fn ($x) => "`$x`")
+            ->join(', ');
+
+        $placeholderGroups = [];
+        $params = [];
+
+        foreach ($records as $rowIndex => $record) {
+            $placeholders = o(...$record)
+                ->keys()
+                ->map(fn (int|string $key) => ":{$key}_{$rowIndex}")
+                ->join(', ');
+
+            $placeholderGroups[] = "($placeholders)";
+
+            foreach ($record as $column => $value) {
+                $params[":{$column}_{$rowIndex}"] = $value;
+            }
+        }
+
+        $prefix = $ignoreDuplicates ? 'insert or ignore' : 'insert';
+        $sql = $prefix." into `$table` ($columns) values ".implode(', ', $placeholderGroups);
+
+        $this->pdo->prepare($sql)->execute($params)
+            ?: error(Exception::class, 'creating record failed');
     }
 
     /**

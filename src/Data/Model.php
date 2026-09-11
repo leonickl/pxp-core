@@ -2,7 +2,6 @@
 
 namespace PXP\Data;
 
-use PXP\Data\Query\Select;
 use PXP\Ds\Vector;
 use PXP\Exceptions\ModelNotFoundException;
 use RuntimeException;
@@ -45,20 +44,16 @@ abstract class Model
         return $this;
     }
 
-    public static function table(): string
+    private static function table(): string
     {
         $object = new static;
 
         if (! isset($object->table)) {
-            throw new RuntimeException('please set table property for '.static::class);
+            $class = static::class;
+            throw new RuntimeException("please set table property for $class");
         }
 
         return $object->table;
-    }
-
-    public static function select(string ...$columns): Select
-    {
-        return new Select(columns: array_values($columns), class: static::class);
     }
 
     /**
@@ -170,6 +165,16 @@ abstract class Model
     public function restore(): void
     {
         DB::init()->restore(self::table(), $this->id);
+    }
+
+    public static function insertMany(self ...$models): void
+    {
+        DB::init()->insertMany(static::table(), array_map(fn ($model) => $model->record, $models));
+    }
+
+    public static function insertOrIgnoreMany(self ...$models): void
+    {
+        DB::init()->insertMany(static::table(), array_map(fn ($model) => $model->record, $models), ignoreDuplicates: true);
     }
 
     public function dd(): never
