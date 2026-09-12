@@ -3,6 +3,7 @@
 namespace PXP\Data\Validate;
 
 use Exception;
+use Closure;
 use PXP\Exceptions\ValidationException;
 
 /**
@@ -27,7 +28,11 @@ class Validator
      */
     private array $guards = [];
 
+    private Closure $mutator;
+
     private bool $throw = true;
+
+    private ?array $errors = null;
 
     public function __construct(private mixed $var, private string $name) {}
 
@@ -36,10 +41,54 @@ class Validator
      */
     public function __call(string $method, array $args): self
     {
-        if (in_array($method, ['string', 'int', 'float', 'array'])) {
+        if (in_array($method, ['string', 'int', 'float', 'array', 'enum'])) {
             $this->type = $method;
 
+            if ($this->type === 'string') {
+                $this->guards[] = new Guard(
+                    fn () => $this->var === null || is_string($this->var),
+                    fn () => "$this->name must be of type $this->type",
+                );
+            }
+
+            if ($method === 'int' || $method === 'float') {
+                $this->guards[] = new Guard(
+                    fn () => $this->var === null || is_numeric($this->var),
+                    fn () => "$this->name must be numeric",
+                );
+
+                $this->mutator = fn () => "{$this->type}val"($this->var);
+            }
+
+            if ($this->type === 'array') {
+                $this->guards[] = new Guard(
+                    fn () => $this->var === null || is_array($this->var),
+                    fn () => "$this->name must be of type $this->type",
+                );
+            }
+
+            if ($method === 'enum') {
+                if (! isset($args[0])) {
+                    throw new Exception('pass an enum to the validator');
+                }
+
+                if (! enum_exists($args[0])) {
+                    throw new Exception('pass a valid enum to the validator');
+                }
+
+                $this->guards[] = new Guard(
+                    fn () => $this->var === null || $args[0]::tryFrom($this->var) !== null,
+                    fn () => "$this->name must be a valid case of ".$args[0],
+                );
+
+                $this->mutator = fn () => $args[0]::tryFrom($this->var);
+            }
+
             return $this;
+        }
+
+        if (! isset($this->type)) {
+            throw new Exception("set a type first (string|int|float|array|enum)");
         }
 
         if ($method === 'nullable') {
@@ -70,6 +119,8 @@ class Validator
 
                 return $this;
             }
+
+            throw new Exception("'min' can only be used for string|int|float");
         }
 
         if ($method === 'max') {
@@ -94,6 +145,8 @@ class Validator
 
                 return $this;
             }
+
+            throw new Exception("'max' can only be used for string|int|float");
         }
 
         if ($method === 'in') {
@@ -106,24 +159,7 @@ class Validator
                 return $this;
             }
 
-            throw new Exception("'in' not valid for type '$this->type'");
-        }
-
-        if ($method === 'enum') {
-            if (! isset($args[0])) {
-                throw new Exception("pass an enum to the validator");
-            }
-            
-            if (! enum_exists($args[0])) {
-                throw new Exception("pass a valid enum to the validator");
-            }
-
-            $this->guards[] = new Guard(
-                fn () => null !== $args[0]::tryFrom($this->var),
-                fn () => "$this->name must be a valid case of ".$args[0],
-            );
-
-            return $this;
+            throw new Exception("'in' can only be used for type string");
         }
 
         if ($method === 'email') {
@@ -136,7 +172,7 @@ class Validator
                 return $this;
             }
 
-            throw new Exception("'email' not valid for type '$this->type'");
+            throw new Exception("'email' can only be used for type string");
         }
 
         throw new Exception("unknown validation rule $method");
@@ -145,23 +181,15 @@ class Validator
     /**
      * @return list<ValidationException>
      */
-    private function errors(): array
+    private function validate(): array
     {
         $errors = [];
 
-        if ($this->var === null) {
-            if ($this->nullable) {
-                return [];
-            } else {
-                return [
-                    new ValidationException("$this->name must not be null"),
-                ];
-            }
-        }
-
-        /** @phpstan-ignore callable.nonCallable */
-        if (isset($this->type) && ! "is_$this->type"($this->var)) {
-            $errors[] = new ValidationException("$this->name must be of type $this->type");
+        if (! $this->nullable) {
+            $this->guards[] = new Guard(
+                fn () => isset($this->var),
+                fn () => "$this->name must not be null",
+            );
         }
 
         foreach ($this->guards as $guard) {
@@ -173,6 +201,15 @@ class Validator
         }
 
         return $errors;
+    }
+
+    private function errors(): array
+    {
+        if (! isset($this->errors)) {
+            $this->errors = $this->validate();
+        }
+
+        return $this->errors;
     }
 
     /**
@@ -196,6 +233,6 @@ class Validator
 
     public function var(): mixed
     {
-        return [$this->name => $this->var];
+        return [$this->name => isset($this->mutator) ? ($this->mutator)($this->var) : $this->var];
     }
 }
