@@ -52,6 +52,11 @@ function o(mixed ...$items): Obj
     return Obj::make((object) $items);
 }
 
+function obj(mixed ...$items): object
+{
+    return (object) $items;
+}
+
 /**
  * @param  array<int|string, mixed>|string|null  $key
  */
