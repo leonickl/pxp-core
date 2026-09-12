@@ -275,7 +275,7 @@ class DB
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
 
-        return v(...$stmt->fetchAll(PDO::FETCH_ASSOC));
+        return v(...$stmt->fetchAll(PDO::FETCH_OBJ));
     }
 
     /**
