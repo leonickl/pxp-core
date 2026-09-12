@@ -12,7 +12,9 @@ label {
 input[type="text"],
 input[type="password"],
 input[type="email"],
-textarea {
+input[type="number"],
+textarea,
+select {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
@@ -63,7 +65,9 @@ textarea {
     input[type="text"],
     input[type="password"],
     input[type="email"],
-    textarea {
+    input[type="number"],
+    textarea,
+    select {
         font-size: 1rem;
     }
 }
@@ -76,7 +80,9 @@ textarea {
     input[type="text"],
     input[type="password"],
     input[type="email"],
-    textarea {
+    input[type="number"],
+    textarea,
+    select {
         background-color: #1f2937;
         border-color: #4b5563;
         color: #f9fafb;
