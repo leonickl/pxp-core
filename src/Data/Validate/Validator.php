@@ -109,6 +109,23 @@ class Validator
             throw new Exception("'in' not valid for type '$this->type'");
         }
 
+        if ($method === 'enum') {
+            if (! isset($args[0])) {
+                throw new Exception("pass an enum to the validator");
+            }
+            
+            if (! enum_exists($args[0])) {
+                throw new Exception("pass a valid enum to the validator");
+            }
+
+            $this->guards[] = new Guard(
+                fn () => null !== $args[0]::tryFrom($this->var),
+                fn () => "$this->name must be a valid case of ".$args[0],
+            );
+
+            return $this;
+        }
+
         if ($method === 'email') {
             if ($this->type === 'string') {
                 $this->guards[] = new Guard(
@@ -143,7 +160,7 @@ class Validator
         }
 
         /** @phpstan-ignore callable.nonCallable */
-        if (! "is_$this->type"($this->var)) {
+        if (isset($this->type) && ! "is_$this->type"($this->var)) {
             $errors[] = new ValidationException("$this->name must be of type $this->type");
         }
 
