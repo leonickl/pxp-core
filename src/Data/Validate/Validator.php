@@ -2,8 +2,8 @@
 
 namespace PXP\Data\Validate;
 
-use Exception;
 use Closure;
+use Exception;
 use PXP\Exceptions\ValidationException;
 
 /**
@@ -88,7 +88,7 @@ class Validator
         }
 
         if (! isset($this->type)) {
-            throw new Exception("set a type first (string|int|float|array|enum)");
+            throw new Exception('set a type first (string|int|float|array|enum)');
         }
 
         if ($method === 'nullable') {
