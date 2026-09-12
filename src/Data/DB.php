@@ -12,10 +12,12 @@ class DB
 {
     private function __construct(private PDO $pdo) {}
 
-    public static function init(): DB
+    public static function init(?string $path = null): DB
     {
+        $path ??= path('database/db.sqlite');
+
         try {
-            return new DB(pdo: new PDO('sqlite:'.path('database/db.sqlite')));
+            return new DB(pdo: new PDO('sqlite:'.$path));
         } catch (PDOException $e) {
             Log::log($e->getMessage());
 
