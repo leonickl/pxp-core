@@ -28,7 +28,10 @@ class Validator
      */
     private array $guards = [];
 
-    private Closure $mutator;
+    /**
+     * @var list<Closure>
+     */
+    private array $mutators = [];
 
     private bool $throw = true;
 
@@ -57,7 +60,7 @@ class Validator
                     fn () => "$this->name must be numeric",
                 );
 
-                $this->mutator = fn () => "{$this->type}val"($this->var);
+                $this->mutators[] = fn () => "{$this->type}val"($this->var);
             }
 
             if ($this->type === 'array') {
@@ -77,11 +80,15 @@ class Validator
                 }
 
                 $this->guards[] = new Guard(
-                    fn () => $this->var === null || $args[0]::tryFrom($this->var) !== null,
+                    fn () => $this->var === null
+                        || $this->var instanceof $args[0]
+                        || $args[0]::tryFrom($this->var) !== null,
                     fn () => "$this->name must be a valid case of ".$args[0],
                 );
 
-                $this->mutator = fn () => $args[0]::tryFrom($this->var);
+                $this->mutators[] = fn () => $this->var instanceof $args[0]
+                    ? $this->var
+                    : $args[0]::tryFrom($this->var);
             }
 
             return $this;
@@ -93,6 +100,15 @@ class Validator
 
         if ($method === 'nullable') {
             $this->nullable = true;
+
+            return $this;
+        }
+
+        if ($method === 'default') {
+            $this->mutators = [
+                fn () => $this->var === null ? ($args[0] ?? null) : $this->var,
+                ...$this->mutators,
+            ];
 
             return $this;
         }
@@ -183,7 +199,9 @@ class Validator
      */
     private function validate(): array
     {
-        $errors = [];
+        if ($this->var === null && $this->nullable) {
+            return [];
+        }
 
         if (! $this->nullable) {
             $this->guards[] = new Guard(
@@ -191,6 +209,8 @@ class Validator
                 fn () => "$this->name must not be null",
             );
         }
+
+        $errors = [];
 
         foreach ($this->guards as $guard) {
             try {
@@ -224,6 +244,8 @@ class Validator
 
     public function __destruct()
     {
+        // TODO: throw all at once (StackException)
+
         if ($this->throw) {
             foreach ($this->errors() as $error) {
                 throw $error;
@@ -233,6 +255,10 @@ class Validator
 
     public function var(): mixed
     {
-        return [$this->name => isset($this->mutator) ? ($this->mutator)($this->var) : $this->var];
+        foreach ($this->mutators as $mutator) {
+            $this->var = $mutator();
+        }
+
+        return [$this->name => $this->var];
     }
 }
