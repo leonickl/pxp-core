@@ -50,6 +50,10 @@
     margin: 0;
 }
 
+.my {
+    margin-block: 1rem;
+}
+
 .p-0 {
     padding: 0;
 }
