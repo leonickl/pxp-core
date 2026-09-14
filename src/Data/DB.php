@@ -61,9 +61,11 @@ class DB
     /**
      * @return list<array<string, mixed>>
      */
-    public function all(string $table): array
+    public function all(string $table, array $columns = ['*']): array
     {
-        $stmt = $this->pdo->prepare("select * from $table where deleted_at is null;");
+        $columns_string = implode(', ', $columns);
+
+        $stmt = $this->pdo->prepare("select $columns_string from $table where deleted_at is null;");
         $stmt->execute();
 
         return array_values($stmt->fetchAll(PDO::FETCH_ASSOC));

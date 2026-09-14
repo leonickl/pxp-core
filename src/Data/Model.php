@@ -59,9 +59,9 @@ abstract class Model
     /**
      * @return Vector<static>
      */
-    public static function all(): Vector
+    public static function all(array $columns = ['*']): Vector
     {
-        $list = DB::init()->all(self::table());
+        $list = DB::init()->all(self::table(), columns: $columns);
 
         return v(...$list)->map(fn (array $record) => (new static(exists: true))->fill(...$record));
     }
