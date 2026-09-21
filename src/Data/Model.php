@@ -66,6 +66,11 @@ abstract class Model
         return v(...$list)->map(fn (array $record) => (new static(exists: true))->fill(...$record));
     }
 
+    public static function count(): int
+    {
+        return DB::init()->count(self::table());
+    }
+
     public static function find(int $id): static
     {
         return static::findBy('id', $id);

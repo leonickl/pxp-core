@@ -71,6 +71,14 @@ class DB
         return array_values($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
+    public function count(string $table): int
+    {
+        $stmt = $this->pdo->prepare("select count(*) as total from $table where deleted_at is null;");
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
+
     /**
      * @return list<array<string, mixed>>
      */
