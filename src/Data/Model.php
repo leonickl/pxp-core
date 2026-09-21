@@ -2,10 +2,10 @@
 
 namespace PXP\Data;
 
+use PXP\Data\Query\Select;
 use PXP\Ds\Vector;
 use PXP\Exceptions\ModelNotFoundException;
 use RuntimeException;
-use PXP\Data\Query\Select;
 
 /**
  * @property int $id
@@ -73,7 +73,7 @@ abstract class Model
     public static function map(iterable $list): Vector
     {
         return v(...$list)
-            ->map(fn (array|object $record) => (new static(exists: true))->fill(...(array)$record));
+            ->map(fn (array|object $record) => (new static(exists: true))->fill(...(array) $record));
     }
 
     public static function count(): int
