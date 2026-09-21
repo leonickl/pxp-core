@@ -5,6 +5,7 @@ namespace PXP\Data;
 use PXP\Ds\Vector;
 use PXP\Exceptions\ModelNotFoundException;
 use RuntimeException;
+use PXP\Data\Query\Select;
 
 /**
  * @property int $id
@@ -44,7 +45,7 @@ abstract class Model
         return $this;
     }
 
-    private static function table(): string
+    public static function table(): string
     {
         $object = new static;
 
@@ -61,9 +62,18 @@ abstract class Model
      */
     public static function all(array $columns = ['*']): Vector
     {
-        $list = DB::init()->all(self::table(), columns: $columns);
+        return static::map(
+            DB::init()->all(self::table(), columns: $columns),
+        );
+    }
 
-        return v(...$list)->map(fn (array $record) => (new static(exists: true))->fill(...$record));
+    /**
+     * @return Vector<static>
+     */
+    public static function map(iterable $list): Vector
+    {
+        return v(...$list)
+            ->map(fn (array|object $record) => (new static(exists: true))->fill(...(array)$record));
     }
 
     public static function count(): int
@@ -180,6 +190,13 @@ abstract class Model
     public static function insertOrIgnoreMany(self ...$models): void
     {
         DB::init()->insertMany(static::table(), array_map(fn ($model) => $model->record, $models), ignoreDuplicates: true);
+    }
+
+    public static function select(string ...$columns): Select
+    {
+        return new Select(
+            columns: count($columns) === 0 ? ['*'] : $columns,
+        )->from(static::class);
     }
 
     public function dd(): never
