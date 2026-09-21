@@ -306,6 +306,14 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
+     * @return Vector<T>
+     */
+    public function skip(int $offset): self
+    {
+        return self::make(array_slice($this->items, $offset));
+    }
+
+    /**
      * @param  callable(T, int=): void  $callback
      */
     public function each(callable $callback): void
