@@ -14,33 +14,39 @@ readonly class Select
         private array $filters = [],
         private array $orders = [],
         private ?int $limit = null,
+        private ?int $offset = null,
     ) {}
+
+    private function params(): array
+    {
+        $params = [];
+
+        foreach ($this as $key => $value) {
+            $params[$key] = $value;
+        }
+
+        return $params;
+    }
+
+    private function with(mixed ...$params): self
+    {
+        return new self(...[...$this->params(), ...$params]);
+    }
 
     /**
      * @param  class-string<Model>  $class
      */
     public function from(string $class): self
     {
-        return new self(
-            columns: $this->columns,
-            class: $class,
-            filters: $this->filters,
-            orders: $this->orders,
-            limit: $this->limit,
-        );
+        return $this->with(class: $class);
     }
 
     public function where(string $column, string $operator, mixed $value, bool $or = false): self
     {
-        $filter = o(column: $column, operator: $operator, value: $value, or: $or);
-
-        return new self(
-            columns: $this->columns,
-            class: $this->class,
-            filters: [...$this->filters, $filter],
-            orders: $this->orders,
-            limit: $this->limit,
-        );
+        return $this->with(filters: [
+            ...$this->filters,
+            o(column: $column, operator: $operator, value: $value, or: $or),
+        ]);
     }
 
     public function whereIs(string $column, mixed $value, bool $or = false): self
@@ -60,24 +66,12 @@ readonly class Select
 
     public function order(string $column, bool $desc = false): self
     {
-        return new self(
-            columns: $this->columns,
-            class: $this->class,
-            filters: $this->filters,
-            orders: [...$this->orders, o(by: $column, desc: $desc)],
-            limit: $this->limit,
-        );
+        return $this->with(orders: [...$this->orders, o(by: $column, desc: $desc)]);
     }
 
-    public function limit(int $limit): self
+    public function limit(int $limit, int $offset = 0): self
     {
-        return new self(
-            columns: $this->columns,
-            class: $this->class,
-            filters: $this->filters,
-            orders: $this->orders,
-            limit: $limit,
-        );
+        return $this->with(limit: $limit, offset: $offset);
     }
 
     private function buildColumns(): string
@@ -127,7 +121,13 @@ readonly class Select
 
     private function buildLimit(): string
     {
-        return isset($this->limit) ? 'limit $this->limit' : '';
+        $sql = isset($this->limit) ? "limit $this->limit" : '';
+
+        if (isset($this->offset) && $this->offset > 0) {
+            $sql = "$sql offset $this->offset";
+        }
+
+        return $sql;
     }
 
     private function build(): object
@@ -161,7 +161,7 @@ readonly class Select
     {
         $built = $this->build();
 
-        exit($built->sql, "\n", json_encode($built->params), "\n");
+        dd($built->sql, "\n", json_encode($built->params), "\n");
     }
 
     /**
@@ -178,7 +178,6 @@ readonly class Select
 
     public function get(): Vector
     {
-        return $this->execute()
-            ->map(fn (array $record) => (new ($this->class)(exists: true))->fill(...$record));
+        return ($this->class)::map($this->execute());
     }
 }
