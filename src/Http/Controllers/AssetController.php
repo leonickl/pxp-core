@@ -32,6 +32,27 @@ class AssetController
         return $content;
     }
 
+    /**
+     * Add this to your route definitions to serve js files:
+     * Route::get('/js/{file}')->do(AssetController::class, 'js')
+     */
+    public function js(string $file): string
+    {
+        if (! preg_match('/^[a-zA-Z-]+$/', $file)) {
+            throw new Exception("Invalid JS path '$file'");
+        }
+
+        header('Content-Type: application/js');
+
+        $content = file_get_contents($this->find($file));
+
+        if (! $content) {
+            throw new Exception("Error reading JS file '$file'");
+        }
+
+        return $content;
+    }
+
     private function find(string $file): string
     {
         foreach (modules() as $module => $_) {
