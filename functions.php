@@ -12,6 +12,7 @@ use PXP\Lib\Resolver;
 use PXP\Lib\Unstatifier;
 use PXP\Router\Route;
 use PXP\Router\Router;
+use PXP\Lib\Log;
 
 function dump(mixed ...$data): void
 {
@@ -281,4 +282,9 @@ function make(string $abstract, mixed ...$args): mixed
 function unstatic(string $class): Unstatifier
 {
     return new Unstatifier($class);
+}
+
+function info(string $message)
+{
+    Log::log($message);
 }
