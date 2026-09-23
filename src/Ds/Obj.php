@@ -177,4 +177,9 @@ class Obj extends stdClass implements ArrayAccess, Countable, IteratorAggregate
     {
         return $this->keys()->includes($key);
     }
+
+    public function with(mixed ...$values): self
+    {
+        return self::make((object) [...$this->items, ...$values]);
+    }
 }
