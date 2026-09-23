@@ -23,7 +23,7 @@ class AssetController
 
         header('Content-Type: text/css');
 
-        $content = file_get_contents($this->find($file));
+        $content = file_get_contents($this->find($file, 'css'));
 
         if (! $content) {
             throw new Exception("Error reading CSS file '$file'");
@@ -44,7 +44,7 @@ class AssetController
 
         header('Content-Type: application/js');
 
-        $content = file_get_contents($this->find($file));
+        $content = file_get_contents($this->find($file, 'js'));
 
         if (! $content) {
             throw new Exception("Error reading JS file '$file'");
@@ -53,14 +53,14 @@ class AssetController
         return $content;
     }
 
-    private function find(string $file): string
+    private function find(string $file, string $type): string
     {
         foreach (modules() as $module => $_) {
-            if (file_exists($path = path("assets/css/$file.css", module: $module))) {
+            if (file_exists($path = path("assets/$type/$file.$type", module: $module))) {
                 return $path;
             }
         }
 
-        throw new Exception("CSS file '$file' does not exist");
+        throw new Exception("$type file '$file' does not exist");
     }
 }
