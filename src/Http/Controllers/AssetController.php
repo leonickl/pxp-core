@@ -42,7 +42,7 @@ class AssetController
             throw new Exception("Invalid JS path '$file'");
         }
 
-        header('Content-Type: application/js');
+        header('Content-Type: text/javascript');
 
         $content = file_get_contents($this->find($file, 'js'));
 
