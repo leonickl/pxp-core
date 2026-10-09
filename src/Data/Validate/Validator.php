@@ -117,7 +117,7 @@ class Validator
             $min = $args[0] ?? 1;
 
             if ($this->type === 'string') {
-                $len = strlen($this->var);
+                $len = mb_strlen($this->var);
 
                 $this->guards[] = new Guard(
                     fn () => $len >= $min,
@@ -143,7 +143,7 @@ class Validator
             $max = $args[0] ?? 100;
 
             if ($this->type === 'string') {
-                $len = strlen($this->var);
+                $len = mb_strlen($this->var);
 
                 $this->guards[] = new Guard(
                     fn () => $len <= $max,
