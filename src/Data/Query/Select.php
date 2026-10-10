@@ -15,6 +15,7 @@ readonly class Select
         private array $orders = [],
         private ?int $limit = null,
         private ?int $offset = null,
+        private bool $deleted = false,
     ) {}
 
     private function params(): array
@@ -72,6 +73,11 @@ readonly class Select
     public function limit(int $limit, int $offset = 0): self
     {
         return $this->with(limit: $limit, offset: $offset);
+    }
+
+    public function deleted(bool $deleted = true): self
+    {
+        return $this->with(deleted: $deleted);
     }
 
     private function buildColumns(): string
@@ -141,10 +147,16 @@ readonly class Select
 
         $sql = "select $columns from $table";
 
-        if (strlen($where->sql) > 0) {
-            $sql = "$sql where deleted_at is null and ($where->sql)";
+        if ($this->deleted) {
+            if (strlen($where->sql) > 0) {
+                $sql = "$sql where $where->sql";
+            }
         } else {
-            $sql = "$sql where deleted_at is null";
+            if (strlen($where->sql) > 0) {
+                $sql = "$sql where deleted_at is null and ($where->sql)";
+            } else {
+                $sql = "$sql where deleted_at is null";
+            }
         }
 
         if (strlen($order) > 0) {
