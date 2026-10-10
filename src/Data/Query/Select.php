@@ -142,9 +142,9 @@ readonly class Select
         $sql = "select $columns from $table";
 
         if (strlen($where->sql) > 0) {
-            $sql = "$sql where deleted_at is not null and ($where->sql)";
+            $sql = "$sql where deleted_at is null and ($where->sql)";
         } else {
-            $sql = "$sql where deleted_at is not null";
+            $sql = "$sql where deleted_at is null";
         }
 
         if (strlen($order) > 0) {
