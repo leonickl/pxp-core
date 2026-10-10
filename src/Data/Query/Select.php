@@ -86,7 +86,7 @@ readonly class Select
 
         foreach ($this->filters as $filter) {
             $keyword = count($filters) === 0
-                ? 'where ' : ($filter->or ? 'or ' : 'and ');
+                ? '' : ($filter->or ? 'or ' : 'and ');
 
             $value = $filter->value === null ? '' : ' ?';
 
@@ -142,7 +142,9 @@ readonly class Select
         $sql = "select $columns from $table";
 
         if (strlen($where->sql) > 0) {
-            $sql = "$sql $where->sql";
+            $sql = "$sql where deleted_at is not null and ($where->sql)";
+        } else {
+            $sql = "$sql where deleted_at is not null";
         }
 
         if (strlen($order) > 0) {
