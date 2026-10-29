@@ -342,4 +342,9 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     {
         return $key >= 0 && $key < $this->count();
     }
+
+    public function unique(): self
+    {
+        return self::make(array_values(array_unique($this->items)));
+    }
 }
