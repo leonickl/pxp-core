@@ -5,12 +5,13 @@ namespace PXP\Data\Query;
 use PXP\Data\DB;
 use PXP\Data\Model;
 use PXP\Ds\Vector;
+use IllegalArgumentException;
 
 readonly class Select
 {
     public function __construct(
         private array $columns,
-        private string $class = '',
+        private string $from = '',
         private array $joins = [],
         private array $filters = [],
         private array $orders = [],
@@ -36,11 +37,11 @@ readonly class Select
     }
 
     /**
-     * @param  class-string<Model>  $class
+     * @param  class-string<Model>|string  $class
      */
-    public function from(string $class): self
+    public function from(string $from = ''): self
     {
-        return $this->with(class: $class);
+        return $this->with(from: $from);
     }
 
     public function join(string $type, string $table, string $on, array $params = []): self
@@ -168,14 +169,14 @@ readonly class Select
     private function build(): object
     {
         $columns = $this->buildColumns();
-        $table = ($this->class)::table();
+        $from = class_exists($this->from) ? ($this->from)::table() : $this->from;
         $joins = $this->buildJoins();
 
         $where = $this->buildWhere();
         $order = $this->buildOrder();
         $limit = $this->buildLimit();
 
-        $sql = "select $columns from $table";
+        $sql = "select $columns from $from";
 
         if (strlen($joins->sql) > 0) {
             $sql = "$sql $joins->sql";
@@ -226,6 +227,6 @@ readonly class Select
 
     public function get(): Vector
     {
-        return ($this->class)::map($this->execute());
+        return ($this->from)::map($this->execute());
     }
 }
