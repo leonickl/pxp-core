@@ -347,4 +347,54 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     {
         return self::make(array_values(array_unique($this->items)));
     }
+
+    public function table(): string
+    {
+        $columns = [];
+        $table = '';
+
+        if ($this->count() === 0) {
+            return '== empty table ==';
+        }
+
+        foreach ($this->first() as $key => $value) {
+            if (! array_key_exists($key, $columns)) {
+                $columns[$key] = 0;
+            }
+
+            $columns[$key] = max($columns[$key], mb_strlen($key));
+        }
+
+        foreach ($this as $row) {
+            foreach ($row as $key => $value) {
+                if (! array_key_exists($key, $columns)) {
+                    $columns[$key] = 0;
+                }
+
+                $columns[$key] = max($columns[$key], mb_strlen($value));
+            }
+        }
+
+        foreach ($columns as $column => $length) {
+            $table .= mb_str_pad($column, $length)." \t ";
+        }
+
+        $table .= "\n";
+
+        foreach ($columns as $column => $length) {
+            $table .= str_repeat('=', $length)." \t ";
+        }
+
+        $table .= "\n";
+
+        foreach($this as $row) {
+            foreach ($columns as $column => $length) {
+                $table .= mb_str_pad(((array)$row)[$column] ?? '---', $length)." \t ";
+            }
+
+            $table .= "\n";
+        }
+
+        return $table;
+    }
 }
