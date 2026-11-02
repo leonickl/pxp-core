@@ -11,6 +11,7 @@ readonly class Select
     public function __construct(
         private array $columns,
         private string $class = '',
+        private array $joins = [],
         private array $filters = [],
         private array $orders = [],
         private ?int $limit = null,
@@ -40,6 +41,18 @@ readonly class Select
     public function from(string $class): self
     {
         return $this->with(class: $class);
+    }
+
+    public function join(string $type, string $table, string $on, array $params = []): self
+    {
+        if (! in_array($type, ['inner', 'left', 'cross'])) {
+            throw new IllegalArgumentException("Unexpected join type '$type'.");
+        }
+
+        return $this->with(joins: [
+            ...$this->joins,
+            o(type: $type, table: $table, on: $on, params: $params ),
+        ]);
     }
 
     public function where(string $column, string $operator, mixed $value, bool $or = false): self
@@ -83,6 +96,22 @@ readonly class Select
     private function buildColumns(): string
     {
         return implode(', ', $this->columns);
+    }
+
+    private function buildJoins(): object
+    {
+        $joins = [];
+        $params = [];
+
+        foreach ($this->joins as $join) {
+            $joins[] = "$join->type join $join->table on $join->on";
+            $params = [...$params, ...$join->params];
+        }
+
+        return o(
+            sql: implode(' ', $joins),
+            params: $params,
+        )->toObject();
     }
 
     private function buildWhere(): object
@@ -140,12 +169,17 @@ readonly class Select
     {
         $columns = $this->buildColumns();
         $table = ($this->class)::table();
+        $joins = $this->buildJoins();
 
         $where = $this->buildWhere();
         $order = $this->buildOrder();
         $limit = $this->buildLimit();
 
         $sql = "select $columns from $table";
+
+        if (strlen($joins->sql) > 0) {
+            $sql = "$sql $joins->sql";
+        }
 
         if ($this->deleted) {
             if (strlen($where->sql) > 0) {
@@ -167,7 +201,7 @@ readonly class Select
             $sql = "$sql $limit";
         }
 
-        return o(sql: $sql, params: $where->params)
+        return o(sql: $sql, params: [...$joins->params, ...$where->params])
             ->toObject();
     }
 
