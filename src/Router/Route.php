@@ -11,9 +11,14 @@ class Route
     /**
      * store all defined routes
      *
-     * @var list<Route>
+     * @var  list<Route>
      */
     private static array $routes = [];
+
+    /**
+     * @var  list<class-string<Middleware>>
+     */
+    private static array $globalMiddlewares = [];
 
     /**
      * @param  null|array{class-string<Controller>, string}  $action
@@ -47,6 +52,11 @@ class Route
         return self::register($route, 'POST');
     }
 
+    public static function global(): GlobalGroup
+    {
+        return GlobalGroup::make();
+    }
+
     public function name(string $name): self
     {
         $this->name = $name;
@@ -75,6 +85,8 @@ class Route
      */
     public static function listForTree(): array
     {
+        $global = GlobalGroup::make();
+
         $routes = [];
 
         foreach (self::$routes as $route) {
@@ -90,7 +102,11 @@ class Route
 
             $action->class = $route->action[0];
             $action->method = $route->action[1];
-            $action->middlewares = $route->middlewares;
+            $action->middlewares = [
+                ...$global->preMiddlewares(),
+                ...$route->middlewares,
+                ...$global->preMiddlewares(),
+            ];
 
             $routes[$route->route][$route->method] = $action;
         }
