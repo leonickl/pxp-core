@@ -13,6 +13,7 @@ use PXP\Lib\Unstatifier;
 use PXP\Router\Route;
 use PXP\Router\Router;
 use PXP\Lib\Log;
+use PXP\Data\Query\Select;
 
 function dump(mixed ...$data): void
 {
@@ -311,4 +312,9 @@ function unstatic(string $class): Unstatifier
 function info(string $message)
 {
     Log::log($message);
+}
+
+function select(string ...$columns): Select
+{
+    return new Select($columns);
 }
