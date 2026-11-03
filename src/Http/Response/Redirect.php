@@ -22,9 +22,9 @@ class Redirect extends Response
     /**
      * @param  array<string, mixed>  $data
      */
-    public static function route(string $route, array $data = []): Redirect
+    public static function route(string $route, array $data = [], array $params = []): Redirect
     {
-        return new Redirect(route($route), $data);
+        return new Redirect(route($route, ...$params), $data);
     }
 
     /**

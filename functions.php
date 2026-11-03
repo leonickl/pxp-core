@@ -167,6 +167,11 @@ function perma(string|array $name, mixed $default = null): mixed
     return new PermamentVariable($name)->get($default);
 }
 
+function redirect(string $route, mixed ...$params): Redirect
+{
+    return Redirect::route($route, params: $params);
+}
+
 /**
  * @param  array<string, mixed>  $data
  */
