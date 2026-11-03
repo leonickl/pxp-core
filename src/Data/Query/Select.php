@@ -69,6 +69,11 @@ readonly class Select
         return $this->where($column, '=', $value, $or);
     }
 
+    public function whereIn(string $column, array $values, bool $or = false): self
+    {
+        return $this->where($column, 'in', $values, $or);
+    }
+
     public function whereNull(string $column, bool $or = false): self
     {
         return $this->where($column, 'is null', null, $or);
@@ -126,6 +131,16 @@ readonly class Select
 
             $value = $filter->value === null ? '' : ' ?';
 
+            if ($filter->operator === 'in') {
+                $placeholders = implode(', ', array_fill(0, count($filter->value), '?'));
+
+                $filters[] = $keyword.$filter->column.' in ('.$placeholders.')';
+
+                $params = [...$params, ...$filter->value];
+
+                continue;
+            }
+             
             $filters[] = $keyword.$filter->column.' '.$filter->operator.$value;
 
             if ($filter->value !== null) {
