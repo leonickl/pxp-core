@@ -393,4 +393,9 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     {
         return self::make($action($this->items));
     }
+
+    public function pluck(string $key)
+    {
+        return $this->map(fn ($record) => $record->$key);
+    }
 }
