@@ -147,17 +147,17 @@ Command::new('make:model', function (?string $model, ?string $table) {
     }
 
     $file = <<<PHP
-    <?php
+        <?php
 
-    namespace App\Models;
+        namespace App\Models;
 
-    use PXP\Data\Model;
+        use PXP\Data\Model;
 
-    class $model extends Model
-    {
-        protected \$table = '$table';
-    }
-    PHP;
+        class $model extends Model
+        {
+            protected \$table = '$table';
+        }
+        PHP;
 
     if (! file_exists(path('src/Models'))) {
         mkdir(path('src/Models'), recursive: true);
@@ -177,24 +177,23 @@ Command::new('make:migration', function (?string $name = null) {
         exit("Please enter a migration name\n");
     }
 
-    $stamp = date('Y-m-d-His');
-    $dir = path('database/migrations');
+    $stamp = date('Ymd-His');
+    $dir = path('migrations');
 
     if (! file_exists($dir)) {
         mkdir($dir, recursive: true);
     }
 
     $file = <<<PHP
-    <?php
+        <?php
 
-    use PXP\Data\DB;
-    use PXP\Data\Migrations\Migration;
+        use PXP\Data\DB;
+        use PXP\Data\Migrations\Migration;
 
-    return Migration::new('$stamp')
-        ->up(fn (DB \$db) => \$db->sql(''))
-        ->down(fn (DB \$db) => \$db->sql(''));
-
-    PHP;
+        return new Migration(function (DB \$db) {
+            // migrate something
+        });
+        PHP;
 
     $filename = "$stamp"."_$name.php";
 
@@ -209,24 +208,24 @@ Command::new('make:migration', function (?string $name = null) {
 
 Command::new('make:controller', function (?string $controller) {
     if ($controller === null) {
-        exit("Please enter a model name\n");
+        exit("Please enter a controller name\n");
     }
 
     $file = <<<PHP
-    <?php
+        <?php
 
-    namespace App\Controllers;
+        namespace App\Controllers;
 
-    use PXP\Http\Controllers\Controller;
+        use PXP\Http\Controllers\Controller;
 
-    class $controller extends Controller
-    {
-        public function index()
+        class $controller extends Controller
         {
-            return view('main');
+            public function index()
+            {
+                return view('main');
+            }
         }
-    }
-    PHP;
+        PHP;
 
     if (! file_exists(path('src/Controllers'))) {
         mkdir(path('src/Controllers'), recursive: true);
@@ -240,3 +239,56 @@ Command::new('make:controller', function (?string $controller) {
 
     exit("Created controller $controller\n");
 });
+
+Command::new('make:view', function (?string $view) {
+    if ($view === null) {
+        exit("Please enter a view name\n");
+    }
+
+    if (! file_exists(path('views'))) {
+        mkdir(path('views'), recursive: true);
+    }
+
+    if (file_exists(path("views/$view.plate"))) {
+        exit("View $view already exists\n");
+    }
+
+    file_put_contents(path("views/$view.plate"), '<h1>Welcome</h1>');
+
+    exit("Created view $view\n");
+});
+
+Command::new('make:middleware', function (?string $middleware) {
+    if ($middleware === null) {
+        exit("Please enter a middleware name\n");
+    }
+
+    $file = <<<PHP
+        <?php
+
+        namespace App\Middleware;
+
+        use PXP\Http\Middleware\Middleware;
+
+        class $middleware extends Middleware
+        {
+            public function apply(): mixed
+            {
+                return true;
+            }
+        }
+        PHP;    
+
+    if (! file_exists(path('src/Middleware'))) {
+        mkdir(path('src/Middleware'), recursive: true);
+    }
+
+    if (file_exists(path("src/Middleware/$middleware.php"))) {
+        exit("Middleware $middleware already exists\n");
+    }
+
+    file_put_contents(path("src/Middleware/$middleware.php"), $file);
+
+    exit("Created middleware $middleware\n");
+});
+
