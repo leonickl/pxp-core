@@ -2,6 +2,7 @@
 
 use PXP\Console\Command;
 use PXP\Data\DB;
+use PXP\Data\Migrations\Migration;
 use PXP\Data\Migrations\Migrator;
 
 Command::new('server', function () {
@@ -9,7 +10,7 @@ Command::new('server', function () {
 });
 
 Command::new('migrate', function () {
-    (new Migrator)->migrate();
+    new Migrator()->migrate();
 });
 
 Command::new('play', function () {
