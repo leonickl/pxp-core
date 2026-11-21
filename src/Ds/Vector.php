@@ -28,12 +28,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
      */
     public static function make(array $items = []): self
     {
-        // @phpstan-ignore function.alreadyNarrowedType
-        if (! array_is_list($items)) {
-            throw new Exception('Vector must receive a list as input');
-        }
-
-        return new self($items);
+        return new self(array_values($items));
     }
 
     /**
@@ -129,7 +124,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
         }
 
         /** @var Vector<U> */
-        return self::make(array_values($new));
+        return self::make($new);
     }
 
     /**
@@ -139,9 +134,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     public function filter(?callable $callback = null): self
     {
         return self::make(
-            array_values(
-                array_filter($this->items, $callback),
-            ),
+            array_filter($this->items, $callback),
         );
     }
 
@@ -248,7 +241,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
      */
     public function with(mixed ...$values): self
     {
-        return self::make([...$this->items, ...array_values($values)]);
+        return self::make([...$this->items, ...$values]);
     }
 
     /**
@@ -257,9 +250,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
     public function without(mixed ...$values): self
     {
         return self::make(
-            array_values(
-                array_diff($this->items, $values),
-            ),
+            array_diff($this->items, $values),
         );
     }
 
@@ -345,7 +336,7 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
 
     public function unique(): self
     {
-        return self::make(array_values(array_unique($this->items)));
+        return self::make(array_unique($this->items));
     }
 
     public function table(): string
