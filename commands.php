@@ -10,6 +10,10 @@ Command::new('server', function () {
 });
 
 Command::new('migrate', function () {
+    if (file_exists(path('migrate.php'))) {
+        exit("Please migrate your old 'migrate.php' file to the new migration scheme\n");
+    }
+
     new Migrator()->migrate();
 });
 
