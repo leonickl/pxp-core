@@ -388,4 +388,9 @@ class Vector implements ArrayAccess, Countable, IteratorAggregate
 
         return $table;
     }
+
+    public function do(callable $action): self
+    {
+        return self::make($action($this->items));
+    }
 }
