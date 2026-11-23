@@ -308,3 +308,8 @@ Command::new('maintenance', function () {
 Command::new('maintenance:off', function () {
     perma(['maintenance' => false]);
 });
+
+Command::new('cache:clear', function () {
+    rmdir(path('cache'));
+});
+
