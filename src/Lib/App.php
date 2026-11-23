@@ -14,6 +14,8 @@ class App
     {
         session_start();
 
+        self::maintenance();
+
         try {
             $response = Router::route();
 
@@ -42,6 +44,30 @@ class App
                 'title' => 'Error',
                 'error' => "An unknown error occured. Contact the admin. (Code $uid)",
             ])->output();
+        }
+    }
+
+    private static function maintenance(): void
+    {
+        $maintenanceToken = perma('maintenance');
+
+        if(! $maintenanceToken) {
+            session(['maintenance' => false]);
+
+            return;
+        }
+
+        // if token is given in url, save it to the session
+        if (request('token') === $maintenanceToken) {
+            session(['maintenance' => $maintenanceToken]);
+        }
+
+        // if session token is not available, block user
+        if (session('maintenance') !== $maintenanceToken) {
+            exit('
+                <h1>Maintenance</h1>
+                <p>This page is in maintenance mode. Please wait a few minutes and try again.</p>
+            ');
         }
     }
 }

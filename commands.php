@@ -297,3 +297,14 @@ Command::new('make:middleware', function (?string $middleware) {
     exit("Created middleware $middleware\n");
 });
 
+Command::new('maintenance', function () {
+    $token = uuidv4();
+
+    perma(['maintenance' => $token]);
+
+    echo "Maintenance token: $token\n";
+});
+
+Command::new('maintenance:off', function () {
+    perma(['maintenance' => false]);
+});
