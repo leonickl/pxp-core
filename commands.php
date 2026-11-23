@@ -313,3 +313,17 @@ Command::new('cache:clear', function () {
     rmdir(path('cache'));
 });
 
+Command::new('update', function () {
+    $commands = [
+        './run maintenance',
+        'git pull',
+        'composer install',
+        'composer dump-autoload',
+        './run migrate',
+        './run cache:clear',
+    ];
+
+    shell_exec(implode(' && ', $commands).' || echo "some error occured"');
+
+    exit("Check whether everything works fine and then disable maintenance mode again.\n");
+});
