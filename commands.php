@@ -310,7 +310,7 @@ Command::new('maintenance:off', function () {
 });
 
 Command::new('cache:clear', function () {
-    rmdir(path('cache'));
+    shell_exec('rm -r cache');
 });
 
 Command::new('update', function () {
