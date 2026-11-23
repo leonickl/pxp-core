@@ -1,3 +1,4 @@
 - FEATURE: maintenance mode
 - FEATURE: clear:cache command
 - FEATURE: update command
+- FEATURE: better error logging

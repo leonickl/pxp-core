@@ -37,8 +37,10 @@ class App
         } catch (Throwable $e) {
             $uid = uniqid();
 
+            $trace = str_repeat(' ', 8).str_replace("\n", "\n".str_repeat(' ', 8), $e->getTraceAsString());
+
             Log::log('Error '.$uid.' ('.$e::class.'): '
-                .$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
+                .$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine().":\n".$trace);
 
             return view('error', [
                 'title' => 'Error',
